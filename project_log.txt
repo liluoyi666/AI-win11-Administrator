@@ -1,0 +1,14 @@
+5.26:
+当输如如：
+"""```json{
+    "type": "powershell",
+    "command": "Add-Content String.py -Value \"\"\"\n# 新增语法规则\nfile_operations=\"\"\"\n文件操作权限验证:\n{\n    \"type\": \"verify_permission\",\n    \"filepath\": \"要验证的文件路径\",\n    \"required_permission\": \"需要的权限级别\"\n}\n\n敏感操作确认机制:\n{\n    \"type\": \"confirm_action\",\n    \"action\": \"要确认的操作描述\",\n    \"confirmation\": \"用户确认信息\"\n}\n\n操作历史记录:\n{\n    \"type\": \"log_history\",\n    \"action\": \"执行的操作描述\",\n    \"details\": \"操作详细信息\"\n}\n\"\"\" -Encoding utf8"
+}```"""
+会出现无法解析json或解析失败的情况。
+
+简单的输入如：
+"""```json{
+    "type": "powershell",
+    "command": "Get-ChildItem"
+}```"""
+就可以被正确解析
