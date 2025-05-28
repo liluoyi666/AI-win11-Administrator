@@ -1,4 +1,5 @@
 from datetime import datetime
+from sys import stdout
 from zoneinfo import ZoneInfo
 import json
 import time
@@ -43,7 +44,7 @@ class main_cycle:
                     print_debug=False,  # 开启调试输出
                     temperature=temperature
                 )
-                print('-----------------------\n',self.round_num,'\n')
+                print('-------------------------------------------------------\n\n',self.round_num,'\n')
                 print('llm_output:\n',self.llm_result)
 
             except Exception as e:
@@ -58,6 +59,9 @@ class main_cycle:
             self.stdout = 'None'
             self.stderr = 'None'
 
+            if result_json["command"]=='exit':
+                self.powershell.close()
+
             if result_json is not None:
                 cmd_result = self.powershell.execute_command(result_json["command"])
 
@@ -67,7 +71,8 @@ class main_cycle:
             else:
                 self.stderr=error_msg
 
-            print('cmd_output:\n',self.stdout)
+            print('输出:\n',self.stdout)
+            print('错误:\n',self.stderr)
 
             time.sleep(3)
 
@@ -75,11 +80,8 @@ class main_cycle:
             if max_rounds is not None and self.round_num==max_rounds:
                 break;
 
-        powershell.close()
+        self.powershell.close()
 
 if __name__ =="__main__":
     xxx=main_cycle()
     xxx.cycle(max_rounds=30)
-
-
-

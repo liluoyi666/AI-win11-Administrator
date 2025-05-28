@@ -1,0 +1,4 @@
+﻿[2025-05-27 23:28:14] 已修复SimpleCNN.py和SimpleRNN.py中的代码格式问题：
+1. 为SimpleCNN.py添加了正确的缩进
+2. 为SimpleRNN.py添加了正确的缩进并删除了文件开头的乱码
+[2025-05-27 23:51] Successfully created and executed hello.py with content: print('hello win11')
