@@ -1,0 +1,469 @@
+Index: project_copy/logs/log_man.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>测试主循环能够初步运行\r\n测试通过执行简单命令\r\n解决了多行命令无法执行问题，能够写入多行代码\r\n测试通过删除文件\r\n测试通过运行python脚本
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/project_copy/logs/log_man.txt b/project_copy/logs/log_man.txt
+--- a/project_copy/logs/log_man.txt	(revision c8b28e08df6e7186201eb1c408449e9dc177183f)
++++ b/project_copy/logs/log_man.txt	(date 1748398044043)
+@@ -1,5 +1,0 @@
+-测试主循环能够初步运行
+-测试通过执行简单命令
+-解决了多行命令无法执行问题，能够写入多行代码
+-测试通过删除文件
+-测试通过运行python脚本
+\ No newline at end of file
+Index: project_copy/logs/log_ai.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>[2025-05-27 23:28:14] 已修复SimpleCNN.py和SimpleRNN.py中的代码格式问题：\r\n1. 为SimpleCNN.py添加了正确的缩进\r\n2. 为SimpleRNN.py添加了正确的缩进并删除了文件开头的乱码\r\n[2025-05-27 23:51] Successfully created and executed hello.py with content: print('hello win11')\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/project_copy/logs/log_ai.txt b/project_copy/logs/log_ai.txt
+--- a/project_copy/logs/log_ai.txt	(revision c8b28e08df6e7186201eb1c408449e9dc177183f)
++++ b/project_copy/logs/log_ai.txt	(date 1748397718696)
+@@ -1,4 +1,0 @@
+-[2025-05-27 23:28:14] 已修复SimpleCNN.py和SimpleRNN.py中的代码格式问题：
+-1. 为SimpleCNN.py添加了正确的缩进
+-2. 为SimpleRNN.py添加了正确的缩进并删除了文件开头的乱码
+-[2025-05-27 23:51] Successfully created and executed hello.py with content: print('hello win11')
+Index: project_copy/.idea/misc.xml
+===================================================================
+diff --git a/project_copy/.idea/misc.xml b/project_copy/.idea/misc.xml
+deleted file mode 100644
+--- a/project_copy/.idea/misc.xml	(revision c8b28e08df6e7186201eb1c408449e9dc177183f)
++++ /dev/null	(revision c8b28e08df6e7186201eb1c408449e9dc177183f)
+@@ -1,7 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="Black">
+-    <option name="sdkName" value="Python 3.9 (Desktop)" />
+-  </component>
+-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9 (py)" project-jdk-type="Python SDK" />
+-</project>
+\ No newline at end of file
+Index: project_copy/String.py
+===================================================================
+diff --git a/project_copy/String.py b/project_copy/String.py
+deleted file mode 100644
+--- a/project_copy/String.py	(revision c8b28e08df6e7186201eb1c408449e9dc177183f)
++++ /dev/null	(revision c8b28e08df6e7186201eb1c408449e9dc177183f)
+@@ -1,50 +0,0 @@
+-"""
+-存放字符串模板
+-"""
+-
+-system_prompt="""
+-你是一个优秀的人工智能体，属于用户 {user} ，你目前是windows11虚拟机的管理员。你可以通过输入特定格式json来操作该虚拟机（编程，查看文件，运行文件），从而对该系统进行操作。
+-
+-当前时间：{Time}
+-
+-交互轮次：{num}
+-
+-用户留言：
+-如果刚开始进入命令行，你会出现在该项目的主文件夹中，其中有一个日志，你可以记录你想记录的东西，以及想对开发者说的东西。
+-readme.txt是项目介绍，ai_log.txt是你的日志，project_log.txt是项目开发日志，你可以查看关于项目的信息以及开发上的问题。
+-如果可以执行，有一个名为String.py的文件，打开后其中grammar是你的操作语法，你可以在原基础上增加一些你觉得有用的语法，需要注意保存。
+-另外，直接读取python文件会导致中文字符串乱码，可能需要使用 -Encoding utf8后缀。
+-在你进行操作期间，开发者无法向你传递任何指令，当你遭遇不可解决的报错，请创建一个文件并记录。
+-"""
+-
+-grammar="""
+-------------------------
+-操作手册:
+-1.你的输入必须是纯json格式，不能有其他多余字符
+-2.请不要忘记安全大于一切
+-3.禁止执行未经安全验证的文件
+-
+-执行系统命令:
+-{
+-    "type": "powershell",
+-    "command": "你要执行的命令",
+-}
+-
+-"""
+-
+-user_msg="""
+-你上一次操作返回的标准输出流：
+-
+-{stdout}
+------------------------
+-你上一次操作返回的标准错误流：
+-
+-{stderr}
+-"""
+-
+-error_msg="""
+-非powershell错误：
+-json解析失败，并未执行命令。
+-"""
+-
+-
+Index: project_copy/.idea/vcs.xml
+===================================================================
+diff --git a/project_copy/.idea/vcs.xml b/project_copy/.idea/vcs.xml
+deleted file mode 100644
+--- a/project_copy/.idea/vcs.xml	(revision c8b28e08df6e7186201eb1c408449e9dc177183f)
++++ /dev/null	(revision c8b28e08df6e7186201eb1c408449e9dc177183f)
+@@ -1,6 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="VcsDirectoryMappings">
+-    <mapping directory="" vcs="Git" />
+-  </component>
+-</project>
+\ No newline at end of file
+Index: project_copy/.idea/inspectionProfiles/profiles_settings.xml
+===================================================================
+diff --git a/project_copy/.idea/inspectionProfiles/profiles_settings.xml b/project_copy/.idea/inspectionProfiles/profiles_settings.xml
+deleted file mode 100644
+--- a/project_copy/.idea/inspectionProfiles/profiles_settings.xml	(revision c8b28e08df6e7186201eb1c408449e9dc177183f)
++++ /dev/null	(revision c8b28e08df6e7186201eb1c408449e9dc177183f)
+@@ -1,6 +0,0 @@
+-<component name="InspectionProjectProfileManager">
+-  <settings>
+-    <option name="USE_PROJECT_PROFILE" value="false" />
+-    <version value="1.0" />
+-  </settings>
+-</component>
+\ No newline at end of file
+Index: project_copy/.idea/.gitignore
+===================================================================
+diff --git a/project_copy/.idea/.gitignore b/project_copy/.idea/.gitignore
+deleted file mode 100644
+--- a/project_copy/.idea/.gitignore	(revision c8b28e08df6e7186201eb1c408449e9dc177183f)
++++ /dev/null	(revision c8b28e08df6e7186201eb1c408449e9dc177183f)
+@@ -1,3 +0,0 @@
+-# 默认忽略的文件
+-/shelf/
+-/workspace.xml
+Index: project_copy/.gitignore
+===================================================================
+diff --git a/project_copy/.gitignore b/project_copy/.gitignore
+deleted file mode 100644
+--- a/project_copy/.gitignore	(revision c8b28e08df6e7186201eb1c408449e9dc177183f)
++++ /dev/null	(revision c8b28e08df6e7186201eb1c408449e9dc177183f)
+@@ -1,174 +0,0 @@
+-# Byte-compiled / optimized / DLL files
+-__pycache__/
+-*.py[cod]
+-*$py.class
+-
+-# C extensions
+-*.so
+-
+-# Distribution / packaging
+-.Python
+-build/
+-develop-eggs/
+-dist/
+-downloads/
+-eggs/
+-.eggs/
+-lib/
+-lib64/
+-parts/
+-sdist/
+-var/
+-wheels/
+-share/python-wheels/
+-*.egg-info/
+-.installed.cfg
+-*.egg
+-MANIFEST
+-
+-# PyInstaller
+-#  Usually these files are written by a python script from a template
+-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+-*.manifest
+-*.spec
+-
+-# Installer logs
+-pip-log.txt
+-pip-delete-this-directory.txt
+-
+-# Unit test / coverage reports
+-htmlcov/
+-.tox/
+-.nox/
+-.coverage
+-.coverage.*
+-.cache
+-nosetests.xml
+-coverage.xml
+-*.cover
+-*.py,cover
+-.hypothesis/
+-.pytest_cache/
+-cover/
+-
+-# Translations
+-*.mo
+-*.pot
+-
+-# Django stuff:
+-*.log
+-local_settings.py
+-db.sqlite3
+-db.sqlite3-journal
+-
+-# Flask stuff:
+-instance/
+-.webassets-cache
+-
+-# Scrapy stuff:
+-.scrapy
+-
+-# Sphinx documentation
+-docs/_build/
+-
+-# PyBuilder
+-.pybuilder/
+-target/
+-
+-# Jupyter Notebook
+-.ipynb_checkpoints
+-
+-# IPython
+-profile_default/
+-ipython_config.py
+-
+-# pyenv
+-#   For a library or package, you might want to ignore these files since the code is
+-#   intended to run in multiple environments; otherwise, check them in:
+-# .python-version
+-
+-# pipenv
+-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
+-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
+-#   install all needed dependencies.
+-#Pipfile.lock
+-
+-# UV
+-#   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.
+-#   This is especially recommended for binary packages to ensure reproducibility, and is more
+-#   commonly ignored for libraries.
+-#uv.lock
+-
+-# poetry
+-#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
+-#   This is especially recommended for binary packages to ensure reproducibility, and is more
+-#   commonly ignored for libraries.
+-#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
+-#poetry.lock
+-
+-# pdm
+-#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
+-#pdm.lock
+-#   pdm stores project-wide configurations in .pdm.toml, but it is recommended to not include it
+-#   in version control.
+-#   https://pdm.fming.dev/latest/usage/project/#working-with-version-control
+-.pdm.toml
+-.pdm-python
+-.pdm-build/
+-
+-# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
+-__pypackages__/
+-
+-# Celery stuff
+-celerybeat-schedule
+-celerybeat.pid
+-
+-# SageMath parsed files
+-*.sage.py
+-
+-# Environments
+-.env
+-.venv
+-env/
+-venv/
+-ENV/
+-env.bak/
+-venv.bak/
+-
+-# Spyder project settings
+-.spyderproject
+-.spyproject
+-
+-# Rope project settings
+-.ropeproject
+-
+-# mkdocs documentation
+-/site
+-
+-# mypy
+-.mypy_cache/
+-.dmypy.json
+-dmypy.json
+-
+-# Pyre type checker
+-.pyre/
+-
+-# pytype static type analyzer
+-.pytype/
+-
+-# Cython debug symbols
+-cython_debug/
+-
+-# PyCharm
+-#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
+-#  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
+-#  and can be added to the global gitignore or merged into this file.  For a more nuclear
+-#  option (not recommended) you can uncomment the following to ignore the entire idea folder.
+-#.idea/
+-
+-# Ruff stuff:
+-.ruff_cache/
+-
+-# PyPI configuration file
+-.pypirc
+Index: project_copy/.idea/inspectionProfiles/Project_Default.xml
+===================================================================
+diff --git a/project_copy/.idea/inspectionProfiles/Project_Default.xml b/project_copy/.idea/inspectionProfiles/Project_Default.xml
+deleted file mode 100644
+--- a/project_copy/.idea/inspectionProfiles/Project_Default.xml	(revision c8b28e08df6e7186201eb1c408449e9dc177183f)
++++ /dev/null	(revision c8b28e08df6e7186201eb1c408449e9dc177183f)
+@@ -1,138 +0,0 @@
+-<component name="InspectionProjectProfileManager">
+-  <profile version="1.0">
+-    <option name="myName" value="Project Default" />
+-    <inspection_tool class="AlphaUnsortedPropertiesFile" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+-    <inspection_tool class="CommandLineInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="CyclomaticComplexityInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+-    <inspection_tool class="DuplicatePropertyInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+-    <inspection_tool class="EmptyDirectory" enabled="true" level="WARNING" enabled_by_default="true" />
+-    <inspection_tool class="InconsistentLineSeparators" enabled="true" level="WARNING" enabled_by_default="true" />
+-    <inspection_tool class="LongLine" enabled="true" level="WARNING" enabled_by_default="true" />
+-    <inspection_tool class="PoetryPackageVersionsInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="ProblematicWhitespace" enabled="true" level="WARNING" enabled_by_default="true" />
+-    <inspection_tool class="PyAbstractClassInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyArgumentEqualDefaultInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyArgumentListInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyAssignmentToLoopOrWithParameterInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyAsyncCallInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyAttributeOutsideInitInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyAugmentAssignmentInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyBroadExceptionInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyByteLiteralInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyCallingNonCallableInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyChainedComparisonsInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyClassHasNoInitInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyClassVarInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyClassicStyleClassInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyComparisonWithNoneInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyCompatibilityInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES">
+-      <option name="ourVersions">
+-        <value>
+-          <list size="2">
+-            <item index="0" class="java.lang.String" itemvalue="2.7" />
+-            <item index="1" class="java.lang.String" itemvalue="3.13" />
+-          </list>
+-        </value>
+-      </option>
+-    </inspection_tool>
+-    <inspection_tool class="PyDataclassInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyDecoratorInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyDefaultArgumentInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyDeprecationInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyDictCreationInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyDictDuplicateKeysInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyDocstringTypesInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyDunderSlotsInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyExceptClausesOrderInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyExceptionInheritInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyFinalInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyFromFutureImportInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyGlobalUndefinedInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyInconsistentIndentationInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyIncorrectDocstringInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyInitNewSignatureInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyInterpreterInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyListCreationInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyMandatoryEncodingInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyMethodFirstArgAssignmentInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyMethodMayBeStaticInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyMethodOverridingInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyMethodParametersInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyMissingConstructorInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyMissingOrEmptyDocstringInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyMissingTypeHintsInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyNamedTupleInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyNestedDecoratorsInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyNewStyleGenericSyntaxInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyNonAsciiCharInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyNoneFunctionAssignmentInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyOldStyleClassesInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyOverloadsInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyOverridesInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES">
+-      <option name="ignoredPackages">
+-        <value>
+-          <list size="0" />
+-        </value>
+-      </option>
+-    </inspection_tool>
+-    <inspection_tool class="PyPandasSeriesToListInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyPep8Inspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES">
+-      <option name="ignoredErrors">
+-        <list>
+-          <option value="E231" />
+-        </list>
+-      </option>
+-    </inspection_tool>
+-    <inspection_tool class="PyPep8NamingInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES">
+-      <option name="ignoredErrors">
+-        <list>
+-          <option value="N801" />
+-        </list>
+-      </option>
+-    </inspection_tool>
+-    <inspection_tool class="PyPropertyAccessInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyPropertyDefinitionInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyProtectedMemberInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyProtocolInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyRedeclarationInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyRedundantParenthesesInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyRelativeImportInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyReturnFromInitInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PySetFunctionToLiteralInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyShadowingBuiltinsInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyShadowingNamesInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PySimplifyBooleanCheckInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PySingleQuotedDocstringInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyStatementEffectInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyStringFormatInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyStubPackagesAdvertiser" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyStubPackagesCompatibilityInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PySuperArgumentsInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyTestParametrizedInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyTestUnpassedFixtureInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyTrailingSemicolonInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyTupleAssignmentBalanceInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyTupleItemAssignmentInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyTypeCheckerInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyTypeHintsInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyTypedDictInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyUnboundLocalVariableInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyUnnecessaryBackslashInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyUnreachableCodeInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES">
+-      <option name="ignoredIdentifiers">
+-        <list>
+-          <option value="ue5.*" />
+-        </list>
+-      </option>
+-    </inspection_tool>
+-    <inspection_tool class="PyUnusedLocalInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="PyVulnerableApiCodeInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+-    <inspection_tool class="RegExpAnonymousGroup" enabled="true" level="WARNING" enabled_by_default="true" />
+-    <inspection_tool class="RestRoleInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+-    <inspection_tool class="TodoComment" enabled="true" level="WARNING" enabled_by_default="true" />
+-    <inspection_tool class="UnusedDefine" enabled="true" level="WARNING" enabled_by_default="true" />
+-    <inspection_tool class="UseEllipsisInPropertyInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+-  </profile>
+-</component>
+\ No newline at end of file
