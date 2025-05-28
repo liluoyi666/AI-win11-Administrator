@@ -1,0 +1,4 @@
+﻿anthropic==0.51.0
+backoff==2.2.1
+openai==1.75.0
+google-generativeai==0.8.5

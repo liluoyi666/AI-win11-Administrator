@@ -65,11 +65,7 @@ class main_cycle:
                 self.powershell.close()
 
             if result_json is not None:
-                cmd_result = self.powershell.execute_command(result_json["command"])
-
-                self.stdout=cmd_result['stdout']
-                self.stderr=cmd_result['stderr']
-
+                self.stdout,self.stderr = self.powershell.execute_command(result_json["command"])
             else:
                 self.stderr=error_msg
 

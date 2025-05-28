@@ -59,7 +59,6 @@ class PowerShellSession:
             self.process.stdin.write(f"# 该命令开始执行的时间{beijing_time}。end_marker'{end_marker}'\n")
             self.process.stdin.flush()
 
-
             output = []
             while True:
                 try:
@@ -77,10 +76,11 @@ class PowerShellSession:
             stderr_output = []
             while not self.stderr_queue.empty():
                 stderr_output.append(self.stderr_queue.get().strip())
-            return {
-                'stdout': '\n'.join(output),        # 标准输出
-                'stderr': '\n'.join(stderr_output)  # 标准错误
-            }
+            # return {
+            #     'stdout': '\n'.join(output),        # 标准输出
+            #     'stderr': '\n'.join(stderr_output)  # 标准错误
+            # }
+            return '\n'.join(output),'\n'.join(stderr_output)
 
     def close(self):
         if self.process and self.process.poll() is None:
@@ -91,20 +91,11 @@ class PowerShellSession:
 if __name__ =="__main__":
     powershell = PowerShellSession()
     try:
-        result=powershell.execute_command('''Set-Content -Path SimpleRNN.py -Value \"import torch\nimport torch.nn as nn\n\nclass SimpleRNN(nn.Module):\n    def __init__(self, input_size, hidden_size, num_layers, num_classes):\n        super(SimpleRNN, self).__init__()\n        self.hidden_size = hidden_size\n        self.num_layers = num_layers\n        self.rnn = nn.RNN(input_size, hidden_size, num_layers, batch_first=True)\n        self.fc = nn.Linear(hidden_size, num_classes)\n    \n    def forward(self, x):\n        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)\n        out, _ = self.rnn(x, h0)\n        out = self.fc(out[:, -1, :])\n        return out\" -Encoding utf8''')
+        result,err=powershell.execute_command('''Set-Content -Path SimpleRNN.py -Value \"import torch\nimport torch.nn as nn\n\nclass SimpleRNN(nn.Module):\n    def __init__(self, input_size, hidden_size, num_layers, num_classes):\n        super(SimpleRNN, self).__init__()\n        self.hidden_size = hidden_size\n        self.num_layers = num_layers\n        self.rnn = nn.RNN(input_size, hidden_size, num_layers, batch_first=True)\n        self.fc = nn.Linear(hidden_size, num_classes)\n    \n    def forward(self, x):\n        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)\n        out, _ = self.rnn(x, h0)\n        out = self.fc(out[:, -1, :])\n        return out\" -Encoding utf8''')
 
-        # myj={
-        #     "type": "powershell",
-        #     "command": """@\"\nimport torch\nimport torch.nn as nn\n\nclass SimpleCNN(nn.Module):\n    def __init__(self):\n        super(SimpleCNN, self).__init__()\n        self.conv1 = nn.Conv2d(3, 16, kernel_size=3, stride=1, padding=1)\n        self.relu = nn.ReLU()\n        self.pool = nn.MaxPool2d(kernel_size=2, stride=2)\n        self.conv2 = nn.Conv2d(16, 32, kernel_size=3, stride=1, padding=1)\n        self.fc = nn.Linear(32 * 8 * 8, 10)\n\n    def forward(self, x):\n        x = self.pool(self.relu(self.conv1(x)))\n        x = self.pool(self.relu(self.conv2(x)))\n        x = x.view(-1, 32 * 8 * 8)\n        x = self.fc(x)\n        return x\n\"@ | Out-File .\\SimpleCNN.py -Encoding utf8"""
-        # }
-        # myj=extract_json_between_markers(myj)#["command"]
-        # print(myj)
-        # result = powershell.execute_command(myj)
+        print("1:\n", result)
+        result,err=powershell.execute_command("Get-ChildItem")
+        print("1:\n", result)
 
-        print("1:\n", result['stdout'])
-        result=powershell.execute_command("Get-ChildItem")
-        print("1:\n", result['stdout'])
-        # result=powershell.execute_command(":@")
-        # print("1:\n", result['stdout'])
     finally:
         powershell.close()
