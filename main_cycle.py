@@ -68,10 +68,10 @@ class main_cycle:
 
             result_json= extract_json_between_markers(self.llm_result)
 
-            if result_json["command"]=='exit':
-                self.powershell.close()
-
             if result_json is not None:
+                if result_json["command"] == 'exit':
+                    self.powershell.close()
+
                 self.stdout,self.stderr = self.powershell.execute_command(result_json["command"])
             else:
                 self.stderr=error_msg
