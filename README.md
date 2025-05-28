@@ -1,6 +1,15 @@
 ﻿# AI Command Line Interface Project
 ## Overview
 This project provides an AI-powered command line interface that allows interaction with a Windows 11 virtual machine through JSON-formatted commands. The system enables file operations, command execution, and logging capabilities.
+
+```
+Execute system commands:
+{
+    "type": "powershell",
+    "command": "your commands",
+}
+```
+
 ## Project Structure
 - `main.py`: Main entry point that initiates the interaction cycle
 - `main_cycle.py`: Core logic for handling the interaction loop with the AI
