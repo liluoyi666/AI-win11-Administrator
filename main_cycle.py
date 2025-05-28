@@ -6,7 +6,8 @@ import time
 
 from brain import PowerShellSession
 from brain import system_prompt, grammar, user_msg,error_msg
-from brain import create_client, get_response_from_llm,extract_json_between_markers,extract_json_between_markers1
+from brain import create_client, get_response_from_llm
+from brain import extract_json_between_markers
 
 """
 while Ture:

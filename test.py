@@ -28,8 +28,10 @@ grammar="""
 {
     "type": "powershell",
     "command": "你要执行的命令",
+    "log":"执行该指令时顺便写入的记录"
 }
-如果"command": "exit"将退出操作,一次只能输入一个该结构
+log为非必要元素，若log不存在则不写入日志，不影响操作，log的值中无需包含时间，系统会自动追加。
+如果"command": "exit"将退出操作。
 """
 
 user_msg="""

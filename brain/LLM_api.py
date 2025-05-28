@@ -252,30 +252,6 @@ def extract_json_between_markers(llm_output):
 
     return None  # No valid JSON found
 
-def extract_json_between_markers1(llm_output):
-    json_pattern = r"```json(.*?)```"
-    matches = re.findall(json_pattern, llm_output, re.DOTALL)
-
-    if not matches:
-        json_pattern = r"\{.*?\}"
-        matches = re.findall(json_pattern, llm_output, re.DOTALL)
-
-    for json_string in matches:
-        json_string = json_string.strip()
-        try:
-            parsed_json = json.loads(json_string)
-            return parsed_json
-        except json.JSONDecodeError:
-            try:
-                # 移除控制字符并转义换行符
-                json_string_clean = re.sub(r"[\x00-\x1F\x7F]", "", json_string)
-                json_string_clean = json_string_clean.replace('\n', '\\n')  # 转义换行符
-                parsed_json = json.loads(json_string_clean)
-                return parsed_json
-            except json.JSONDecodeError:
-                continue
-    return None
-
 # 创建客户端
 def create_client(model):
     if model.startswith("claude-"):
@@ -316,52 +292,45 @@ def create_client(model):
 
 if __name__ == "__main__":
     # 测试配置
-    test_model = "deepseek-coder"  # 也可以换成其他支持的模型
-    system_msg = system_prompt.format(
-        user='wqws',
-        Time='None'
-    )+grammar
-    user_msg = user_msg.format(
-        stdout='None',
-        stderr='None'
-    )
-
-
-    try:
-        # 创建客户端并显示测试信息
-        client, model_name = create_client(test_model)
-
-        # 获取LLM响应
-        response_content, msg_history = get_response_from_llm(
-            msg=user_msg,
-            client=client,
-            model=model_name,
-            system_message=system_msg,
-            print_debug=False,  # 开启调试输出
-            temperature=0.7
+    def test1():
+        test_model = "deepseek-coder"  # 也可以换成其他支持的模型
+        system_msg = system_prompt.format(
+            user='wqws',
+            Time='None'
+        )+grammar
+        user_msg = user_msg.format(
+            stdout='None',
+            stderr='None'
         )
 
-        # 打印原始响应
-        print("\n原始响应:")
-        print(response_content)
 
-        # 尝试提取JSON并验证
-        extracted_json = extract_json_between_markers(response_content)
-        if extracted_json:
-            print("\nJSON验证: 格式正确")
-        else:
-            print("\n警告: 未检测到有效JSON格式")
+        try:
+            # 创建客户端并显示测试信息
+            client, model_name = create_client(test_model)
 
-        print(extracted_json)
-        # 打印历史记录长度
-        # print(f"\n对话历史记录数: {len(msg_history)}")
+            # 获取LLM响应
+            response_content, msg_history = get_response_from_llm(
+                msg=user_msg,
+                client=client,
+                model=model_name,
+                system_message=system_msg,
+                print_debug=False,  # 开启调试输出
+                temperature=0.7
+            )
 
-    except ValueError as ve:
-        print(f"\n配置错误: {ve}")
-        print("请检查: 1. 模型名称是否正确 2. 对应API密钥是否设置")
-    except Exception as e:
-        print(f"\n运行时错误: {str(e)}")
-        if "AuthenticationError" in str(e):
-            print("请检查API密钥是否正确设置")
-        elif "RateLimitError" in str(e):
-            print("API调用限额已用尽，请稍后重试")
+            # 打印原始响应
+            print("\n原始响应:")
+            print(response_content)
+
+            # 打印历史记录长度
+            # print(f"\n对话历史记录数: {len(msg_history)}")
+
+        except ValueError as ve:
+            print(f"\n配置错误: {ve}")
+            print("请检查: 1. 模型名称是否正确 2. 对应API密钥是否设置")
+        except Exception as e:
+            print(f"\n运行时错误: {str(e)}")
+            if "AuthenticationError" in str(e):
+                print("请检查API密钥是否正确设置")
+            elif "RateLimitError" in str(e):
+                print("API调用限额已用尽，请稍后重试")
