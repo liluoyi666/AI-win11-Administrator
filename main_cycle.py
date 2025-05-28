@@ -23,8 +23,8 @@ class main_cycle:
 
         self.msg_history = None
         self.llm_result = None
-        self.stdout = 'None'
-        self.stderr = 'None'
+        self.stdout = ''
+        self.stderr = ''
         self.round_num = 0
 
     def cycle(self,max_rounds=None,temperature=0.75,msg='无',
