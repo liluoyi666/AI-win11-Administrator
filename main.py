@@ -6,10 +6,10 @@ def work():
 主文件夹中有个空的requirements.txt，project_copy文件夹是项目的副本，供你查看项目的信息。将项目需要依赖写进requirements.txt。
 另外，直接读取文件时会导致中文字符串乱码，可能需要使用 -Encoding utf8后缀。
 在你进行操作期间，开发者无法向你传递任何指令，当你遭遇不可解决的报错，请创建一个文件并记录。
-    '''
+'''
 
-    xxx = main_cycle(msg=msg)
-    xxx.cycle(max_rounds=30)
+    xxx = main_cycle()
+    xxx.cycle(max_rounds=30,msg=msg)
 
 if __name__ =="__main__":
     work()

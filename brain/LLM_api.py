@@ -8,7 +8,8 @@ import openai
 import google.generativeai as genai
 from google.generativeai.types import GenerationConfig
 
-# from String_Templates import system_prompt,user_msg,grammar
+
+# 特别感谢 https://github.com/SakanaAI/AI-Scientist.git
 
 """
 def create_client(...)      

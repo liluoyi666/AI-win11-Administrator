@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="32a9f10d-ab2e-488d-8dd8-5aa0a6bb1810" name="更改" comment="xxx" />
+    <list default="true" id="32a9f10d-ab2e-488d-8dd8-5aa0a6bb1810" name="更改" comment="xxx">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/brain/LLM_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/brain/LLM_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/brain/String_Templates.py" beforeDir="false" afterPath="$PROJECT_DIR$/brain/String_Templates.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/brain/executor.py" beforeDir="false" afterPath="$PROJECT_DIR$/brain/executor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_cycle.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_cycle.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,7 +33,6 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="ROOT_SYNC" value="SYNC" />
-    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -59,7 +66,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Let-LLM-control-Win11/project_copy",
+    "last_opened_file_path": "C:/Let-LLM-control-Win11",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
@@ -118,7 +125,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748400019408</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="xxx">
+      <option name="closed" value="true" />
+      <created>1748400588237</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1748400588237</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

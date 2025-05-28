@@ -6,7 +6,9 @@ from zoneinfo import ZoneInfo
 import time
 import uuid
 
-# from LLM_api import extract_json_between_markers
+"""
+创建一个持久化的powershell窗口，能够输入和输出
+"""
 
 
 class PowerShellSession:
@@ -76,10 +78,6 @@ class PowerShellSession:
             stderr_output = []
             while not self.stderr_queue.empty():
                 stderr_output.append(self.stderr_queue.get().strip())
-            # return {
-            #     'stdout': '\n'.join(output),        # 标准输出
-            #     'stderr': '\n'.join(stderr_output)  # 标准错误
-            # }
             return '\n'.join(output),'\n'.join(stderr_output)
 
     def close(self):
