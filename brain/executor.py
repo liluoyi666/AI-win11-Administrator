@@ -51,6 +51,10 @@ class PowerShellSession:
         with self.lock:  # 确保命令顺序执行
             if self.process.poll() is not None:     #如果进程不存在
                 raise RuntimeError("PowerShell process is not running")
+            command=command["command"]
+
+            if command == 'exit':
+                self.close()
 
             end_marker = str(uuid.uuid4())
             start_time = time.time()

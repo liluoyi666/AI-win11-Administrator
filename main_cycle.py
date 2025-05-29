@@ -8,6 +8,7 @@ from brain import PowerShellSession
 from brain import system_prompt, grammar, user_msg,error_msg
 from brain import create_client, get_response_from_llm
 from brain import extract_json_between_markers
+from brain import log
 
 """
 while Ture:
@@ -15,12 +16,13 @@ while Ture:
 """
 
 class main_cycle:
-    def __init__(self,user='wqws',model_name="deepseek-coder"):
+    def __init__(self,user='wqws',model_name="deepseek-coder",log_path=r"logs\log_ai.txt"):
         self.test_model = model_name
         self.user=user
 
-        self.powershell = PowerShellSession()
-        self.client, self.test_model = create_client(self.test_model) #创建客户端
+        self.powershell = PowerShellSession()                         # 创建powershell
+        self.client, self.test_model = create_client(self.test_model) # 创建客户端
+        self.log=log(log_path)                                        # 打开日志
 
         self.msg_history = None
         self.llm_result = None
@@ -29,12 +31,19 @@ class main_cycle:
         self.round_num = 0
 
     def cycle(self,max_rounds=None,temperature=0.75,msg='无',
-              LLM_print=True, stderr_print=True, stdout_print=True
-              ):
+              LLM_print=True, stderr_print=True, stdout_print=True):
+
+        # 将所有操作方法存储在字典
+        method = {}
+        method["powershell"] = self.powershell.execute_command
+        method["read_log"] = self.log.read
+
+        # 进入主循环
         while True:
             self.round_num+=1
             print(self.round_num,'----------------------------------------------------------------------\n\n')
 
+            # 生成字符串，用于发送给ai
             system_msg = system_prompt.format(
                 user= self.user,
                 Time=str(datetime.now(ZoneInfo("Asia/Shanghai"))),
@@ -48,6 +57,7 @@ class main_cycle:
             self.stdout = 'None'
             self.stderr = 'None'
 
+            # 尝试得到ai的响应
             try:
                 self.llm_result, self.msg_history = get_response_from_llm(
                     msg=cmd_output,
@@ -67,13 +77,24 @@ class main_cycle:
                 elif "RateLimitError" in str(e):
                     print("API调用限额已用尽，请稍后重试")
 
+            now_time = str(datetime.now(ZoneInfo("Asia/Shanghai")))[:19]
             result_json= extract_json_between_markers(self.llm_result)
 
-            if result_json is not None:
-                if result_json["command"] == 'exit':
-                    self.powershell.close()
+            # 如果json解析成功
+            if result_json is not None and "type" in result_json:
+                Type=result_json["type"]
 
-                self.stdout,self.stderr = self.powershell.execute_command(result_json["command"])
+                if "add_log" in result_json:
+                    print(result_json["add_log"].strip())
+                    self.log.write(time=now_time, msg=result_json["add_log"].strip())
+                if "command" in result_json:
+                    if result_json["command"]=="exit":
+                        self.log.flush_buffer()
+
+                # 核心操作
+                self.stdout,self.stderr = method[Type](result_json)
+
+            # 如果json无法解析
             else:
                 self.stderr=error_msg
 
@@ -90,7 +111,7 @@ class main_cycle:
 
 if __name__ =="__main__":
     msg='''
-如果刚开始进入命令行，你会出现在该项目的主文件夹中，其中logs/ai_log.txt是你的日志，你可以记录一些东西，以及想对开发者说的东西。
+如果刚开始进入命令行，你会出现在该项目的主文件夹中，以及想对开发者说的东西。
 其中有个README.md是未完成的项目介绍,project_copy文件夹是项目的副本，我希望你查看项目的一些信息，然后完成markdown。
 另外，直接读取文件时会导致中文字符串乱码，可能需要使用 -Encoding utf8后缀。
 在你进行操作期间，开发者无法向你传递任何指令，当你遭遇不可解决的报错，请创建一个文件并记录。'''
