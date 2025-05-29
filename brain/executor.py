@@ -93,10 +93,8 @@ class PowerShellSession:
 if __name__ =="__main__":
     powershell = PowerShellSession()
     try:
-        result,err=powershell.execute_command('''Set-Content -Path SimpleRNN.py -Value \"import torch\nimport torch.nn as nn\n\nclass SimpleRNN(nn.Module):\n    def __init__(self, input_size, hidden_size, num_layers, num_classes):\n        super(SimpleRNN, self).__init__()\n        self.hidden_size = hidden_size\n        self.num_layers = num_layers\n        self.rnn = nn.RNN(input_size, hidden_size, num_layers, batch_first=True)\n        self.fc = nn.Linear(hidden_size, num_classes)\n    \n    def forward(self, x):\n        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)\n        out, _ = self.rnn(x, h0)\n        out = self.fc(out[:, -1, :])\n        return out\" -Encoding utf8''')
+        result,err=powershell.execute_command({"command":'''Set-Content -Path SimpleRNN.py -Value \"import torch\nimport torch.nn as nn\n\nclass SimpleRNN(nn.Module):\n    def __init__(self, input_size, hidden_size, num_layers, num_classes):\n        super(SimpleRNN, self).__init__()\n        self.hidden_size = hidden_size\n        self.num_layers = num_layers\n        self.rnn = nn.RNN(input_size, hidden_size, num_layers, batch_first=True)\n        self.fc = nn.Linear(hidden_size, num_classes)\n    \n    def forward(self, x):\n        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)\n        out, _ = self.rnn(x, h0)\n        out = self.fc(out[:, -1, :])\n        return out\" -Encoding utf8'''})
 
-        print("1:\n", result)
-        result,err=powershell.execute_command("Get-ChildItem")
         print("1:\n", result)
 
     finally:
