@@ -9,7 +9,7 @@ import google.generativeai as genai
 from google.generativeai.types import GenerationConfig
 
 
-# 特别感谢 https://github.com/SakanaAI/AI-Scientist.git
+# 该代码来自https://github.com/SakanaAI/AI-Scientist.git，特别感谢
 
 """
 def create_client(...)      

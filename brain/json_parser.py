@@ -2,6 +2,7 @@ import json
 import re
 
 def extract_json_between_markers(llm_output):
+    # 该代码来自https://github.com/SakanaAI/AI-Scientist.git，特别感谢
 
     json_pattern = r"```json(.*?)```"
     matches = re.findall(json_pattern, llm_output, re.DOTALL)

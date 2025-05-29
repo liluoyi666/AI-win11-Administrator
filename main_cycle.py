@@ -33,10 +33,11 @@ class main_cycle:
     def cycle(self,max_rounds=None,temperature=0.75,msg='无',
               LLM_print=True, stderr_print=True, stdout_print=True):
 
-        # 将所有操作方法存储在字典
+        # 将所有type对应的操作方法存储在字典
         method = {}
         method["powershell"] = self.powershell.execute_command
         method["read_log"] = self.log.read
+        method["exit"] = self.close
 
         # 进入主循环
         while True:
@@ -87,9 +88,6 @@ class main_cycle:
                 if "add_log" in result_json:
                     print(result_json["add_log"].strip())
                     self.log.write(time=now_time, msg=result_json["add_log"].strip())
-                if "command" in result_json:
-                    if result_json["command"]=="exit":
-                        self.log.flush_buffer()
 
                 # 根据Type选择相应的方法，并进行操作
                 self.stdout,self.stderr = method[Type](result_json)
@@ -107,10 +105,17 @@ class main_cycle:
             if max_rounds is not None and self.round_num==max_rounds:
                 break;
 
-    # 关闭方法(测试中)
-    def close(self):
-        self.log.flush_buffer()
-        self.powershell.close()
+            if self.stdout=="<__exit__>":
+                return
+
+    # 关闭方法
+    def close(self,msg):
+        if msg["confirm"]=="true":
+            self.log.flush_buffer()
+            self.powershell.close()
+            return "<__exit__>",""
+        else:
+            return "","未确认关闭"
 
 if __name__ =="__main__":
     msg='''

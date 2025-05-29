@@ -40,7 +40,6 @@ add_log为非必要键，且不与任何type相排斥，记入时会自动添加
     "type": "powershell",
     "command": "你要执行的命令",
 }
-如果"command": "exit"将退出操作。
 可添加add_log。
 
 
@@ -53,6 +52,13 @@ add_log为非必要键，且不与任何type相排斥，记入时会自动添加
 以行为单位，输出为log[x:y]，如果start不存在则默认为0，如果end不存在则默认为max_len，且都可为负数。
 可添加add_log。
 
+3.停止交互:
+{
+    "type": "exit",
+    "confirm": "true"
+}
+会关闭系统主循环以及其子进程。
+可添加add_log。
 """
 
 

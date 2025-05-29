@@ -18,3 +18,4 @@
 [2025-05-29 16:29:28]- Verifying the created RNN model file
 [2025-05-29 16:29:37]- Testing the RNN model execution
 [2025-05-29 16:29:52]- RNN model test completed successfully. Model output verified.
+[2025-05-29 17:07:14]- 测试关闭功能正常
