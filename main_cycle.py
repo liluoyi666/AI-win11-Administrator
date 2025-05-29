@@ -91,7 +91,7 @@ class main_cycle:
                     if result_json["command"]=="exit":
                         self.log.flush_buffer()
 
-                # 核心操作
+                # 根据Type选择相应的方法，并进行操作
                 self.stdout,self.stderr = method[Type](result_json)
 
             # 如果json无法解析
@@ -107,6 +107,9 @@ class main_cycle:
             if max_rounds is not None and self.round_num==max_rounds:
                 break;
 
+    # 关闭方法(测试中)
+    def close(self):
+        self.log.flush_buffer()
         self.powershell.close()
 
 if __name__ =="__main__":

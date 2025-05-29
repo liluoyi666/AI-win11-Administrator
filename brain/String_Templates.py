@@ -43,6 +43,7 @@ add_log为非必要键，且不与任何type相排斥，记入时会自动添加
 如果"command": "exit"将退出操作。
 可添加add_log。
 
+
 2.查看日志:
 {
     "type": "read_log",
@@ -68,8 +69,8 @@ user_msg="""
 """
 
 error_msg="""
-非powershell错误：
 json解析失败，并未执行命令。
+如果输入过于负责，请尝试分布操作。
 """
 
 

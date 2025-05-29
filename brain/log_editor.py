@@ -42,7 +42,6 @@ class log:
                 print(f"写入日志文件失败: {e}")
 
     def __del__(self):
-        """析构函数：对象销毁时自动调用"""
         self.flush_buffer()
 
 if __name__ == "__main__":
