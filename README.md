@@ -1,57 +1,34 @@
-# AI Command Line Interface Project
-## Enhanced Project Overview
-This project provides an AI-powered command line interface that interacts with a Windows 11 virtual machine through JSON-formatted commands. The system supports file operations, command execution, and comprehensive logging capabilities.
-### Key Components
-- **Core Modules**
-  - `main.py`: Main entry point for the interaction cycle
-  - `main_cycle.py`: Core logic for AI interaction loop
-  - `brain/`: Contains core functionality modules
-    - `executor.py`: Handles PowerShell command execution
-    - `LLM_api.py`: Manages LLM API interactions
-    - `String_Templates.py`: Contains prompt templates and syntax definitions
-
-- **Supporting Files**
-  - `README_zh.md`: Chinese version documentation
-  - `requirements.txt`: Python dependencies
-  - `test.py`: Test scripts
-- **System Directories**
-  - `logs/`: System log directory
-    - `ai_log.txt`: AI operation log file
-  - `.idea/`: IDE configuration files
-  - `__pycache__/`: Python compiled files
-
-## Advanced Features
-- JSON Command Interface
-- Multi-language Support with UTF-8 encoding
-- Comprehensive Security with command validation
-- Detailed Logging System for operation tracking
-
-## System Requirements
-- Python 3.9+
-- PowerShell 7+
-- LLM API access (configured in brain/LLM_api.py)
-
-## Usage Instructions
-1. Execute `main.py` to initiate the interaction cycle
-2. The AI will process JSON-formatted commands
-3. Monitor operations through `logs/ai_log.txt`
-## Technical Notes
-- Always use UTF-8 encoding for files containing Chinese characters
-- Automatic error logging for troubleshooting
-- Strict security validation for all executed commands
-
+ï»¿# AI-win11-Administrator Project
+## Project Overview
+This project enables LLM to operate Windows 11 through a controlled PowerShell interface. The system is designed to maintain stability while allowing the AI to perform various tasks.
+## Core Features
+- PowerShell command execution via structured JSON
+- Virtual machine environment for safety
+- Multiple data type interfaces
+- Self-iteration capabilities
 ## Project Structure
-AI-win11-Administrator/
-©À©¤©¤ brain/
-©¦   ©À©¤©¤ executor.py
-©¦   ©À©¤©¤ LLM_api.py
-©¦   ©¸©¤©¤ String_Templates.py
-©À©¤©¤ logs/
-©¦   ©¸©¤©¤ ai_log.txt
-©À©¤©¤ .idea/
-©À©¤©¤ __pycache__/
-©À©¤©¤ main.py
-©À©¤©¤ main_cycle.py
-©À©¤©¤ README.md
-©À©¤©¤ README_zh.md
-©¸©¤©¤ requirements.txt
+- `main.py`: Entry point
+- `main_cycle.py`: Core execution loop
+- `brain/`: Core AI processing modules
+- `logs/`: System operation logs
+## Usage
+The system accepts JSON-formatted commands and executes them in a secure PowerShell environment.
+## Future Plans
+- Expand command set
+- Improve self-learning capabilities
+- Add more complex task automation
+
+
+## é¡¹ç›®æ„¿æ™¯
+
+
+æœ¬é¡¹ç›®å¸Œæœ›è®©LLMæ“ä½œwindows11
+
+è®¡åˆ’ï¼š
+    èµ·æ­¥ï¼šè®©LLMèƒ½å¤Ÿæ“ä½œpowershell,èƒ½å¤Ÿä¿è¯ç¨‹åºç¨³å®šè¿è¡Œã€‚
+    åˆæœŸï¼šå°†ç¨‹åºè½¬ç§»åˆ°è™šæ‹Ÿæœºï¼Œå¢åŠ æ›´å¤šæ“ä½œè¯­æ³•ï¼Œä»¥åŠå®‰å…¨è®¾ç½®ã€‚
+    ä¸­æœŸï¼šå¢åŠ æ›´å¤šæ•°æ®ç±»å‹æ¥å£ï¼Œå°è¯•è®©LLMè‡ªä¸»å®ŒæˆæŸäº›ç®€å•é¡¹ç›®ã€‚
+    åæœŸï¼šè®©LLMå®Œæˆäººç±»æ‰€èƒ½å®Œæˆçš„æ‰€æœ‰ä»»åŠ¡ï¼Œå¹¶å®ç°è‡ªæˆ‘è¿­ä»£ã€‚
+
+æ ¸å¿ƒè®¾ç½®ï¼š
+è®©LLMç”Ÿæˆå›ºå®šæ ¼å¼jsonè¿›è¡Œæ“ä½œ
