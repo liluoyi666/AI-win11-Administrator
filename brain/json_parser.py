@@ -29,21 +29,23 @@ def extract_json_between_markers(llm_output):
     return None
 
 if __name__ == "__main__":
-    x2="""
- ```json{
+
+    x1 = """
+```json{
     "type": "powershell",
-    "command": "Add-Content 'enhanced_README.md' -Encoding utf8 -Value \\"\\n",
+    "command": "Get-ChildItem -Recurse | Where-Object { $_.Name -match 'README' } | Select-Object -ExpandProperty FullName",
     "add_log": "为enhanced_README.md添加更详细的技术文档和架构说明"
 }```
 """
-    x1 = """
-{
+    x2 = """
+```json{
     "type": "powershell",
-    "command": "Add-Content 'enhanced_README.md' -Encoding utf8 -Value \\"\\n",
+    "command": "Get-ChildItem -Recurse | Where-Object { $_.Name -match 'README' } | Select-Object -ExpandProperty FullName",
     "add_log": "为enhanced_README.md添加更详细的技术文档和架构说明"
-}
+}```
 """
 
     y=extract_json_between_markers(x1)
+    print(y)
     y=json.loads(x1)
     print(y)
