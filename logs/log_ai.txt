@@ -19,7 +19,6 @@
 [2025-05-29 16:29:37]- Testing the RNN model execution
 [2025-05-29 16:29:52]- RNN model test completed successfully. Model output verified.
 [2025-05-29 17:07:14]- 测试关闭功能正常
-
 [2025-05-29 18:16:19]- 开始扫描主文件夹内容以准备生成README.md
 [2025-05-29 18:16:30]- 尝试使用替代方法获取目录内容，避免Encoding参数错误
 [2025-05-29 18:16:39]- 尝试读取README.md文件内容以了解项目结构
