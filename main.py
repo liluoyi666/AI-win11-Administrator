@@ -3,8 +3,9 @@ from main_cycle import main_cycle
 def work():
     msg = '''
 如果刚开始进入命令行，你会出现在该项目的主文件夹中。
-我想测试一下你视角中的反斜杠和我的区别，请你输入8个反斜杠和4个反斜杠分别继续write_out和写入test.txt中，并记录你输入的个数，在命令行中输出时的个数，在文件中写入的个数。
-记住，是你在输入时的视角中的8个反斜杠和4个反斜杠
+我开发了一个名为TextEditor的操作方法，并发现一次性写入大量文本时，会出现json解析失败的情况。
+请你读取README.md，分别测试将不同的行抄写到test.txt。以此测试到底是什么东西导致json解析失败
+似乎和转义字符有关，注意尝试转义字符多的行，也可能与特殊字符有关
 '''
 
     msg1 = '''
@@ -14,7 +15,7 @@ def work():
 '''
 
     system = main_cycle(log_path=r"logs\log_ai.txt")
-    system.cycle(max_rounds=30,msg=msg)
+    system.cycle(max_rounds=100,msg=msg)
 
 if __name__ =="__main__":
     work()
