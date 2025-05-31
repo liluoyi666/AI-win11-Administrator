@@ -7,7 +7,7 @@ import time
 from brain import PowerShellSession
 from brain import system_prompt, grammar, user_msg,error_msg
 from brain import create_client, get_response_from_llm
-from brain import extract_json_between_markers
+from brain import extract_json_between_markers,json_parser
 from brain import log
 
 from more_Types import Name_TextEditor,TextEditor_user_manual,TextEditor
@@ -82,7 +82,8 @@ class main_cycle:
                     print("API调用限额已用尽，请稍后重试")
 
             now_time = str(datetime.now(ZoneInfo("Asia/Shanghai")))[:19]
-            result_json= extract_json_between_markers(self.llm_result)
+            # result_json= extract_json_between_markers(self.llm_result)
+            result_json= json_parser(self.llm_result)
 
             # 如果json解析成功
             if result_json is not None and "type" in result_json:
@@ -122,10 +123,10 @@ class main_cycle:
 
 if __name__ =="__main__":
     msg='''
-如果刚开始进入命令行，你会出现在该项目的主文件夹中，以及想对开发者说的东西。
-其中有个README.md是未完成的项目介绍,project_copy文件夹是项目的副本，我希望你查看项目的一些信息，然后完成markdown。
-另外，直接读取文件时会导致中文字符串乱码，可能需要使用 -Encoding utf8后缀。
-在你进行操作期间，开发者无法向你传递任何指令，当你遭遇不可解决的报错，请创建一个文件并记录。'''
+如果刚开始进入命令行，你会出现在该项目的主文件夹中。
+请你尝试使用TextEditor的操作方法，读取README.md文件，并将42到48行抄写到test.txt。
+如果没有报错，README.md的英文部分全部抄入。
+'''
 
     xxx=main_cycle()
     xxx.cycle(max_rounds=30,msg=msg)
