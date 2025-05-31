@@ -1,5 +1,125 @@
-﻿# AI-win11-Administrator
-# AI-win11-管理员
+﻿
+# AI-win11-Administrator (English)
+点击 [AI-win11-管理员 (中文)](#ai-win11-管理员-中文) 跳转到中文版.
+
+## Project Overview
+This project aims to enable large language models (LLMs) to operate the Windows 11 system. Through a controllable PowerShell interface, the system allows the AI to perform various tasks while maintaining stability. This makes it possible to automate operations on the Windows 11 system, enabling the AI to automatically complete some repetitive tasks and improving work efficiency.
+***This will maximize the capabilities of AI***
+
+## Core Features
+- **Structured JSON Execution of PowerShell Commands**: LLMs can easily execute PowerShell commands through a specific JSON format to operate the system.
+- **Secure Virtual Machine Environment**: Deploying the program in a virtual machine enhances system security and avoids potential impacts on the host system due to incorrect operations.
+- **Multi - Data Type Interfaces**: Supports interfaces for multiple data types, providing LLMs with more comprehensive data processing capabilities.
+- **Self - Iteration Ability**: LLMs have the ability to self - iterate, continuously improving performance and functionality over time.
+
+## Project Vision
+### Plan
+- **Initial Stage**: Enable the LLM to operate PowerShell and ensure the program runs stably.
+- **Early Stage**: Transfer the program to a virtual machine and add more operation syntax and security settings.
+- **Middle Stage**: Add more data type interfaces and attempt to let the LLM independently complete some simple projects.
+- **Late Stage**: Enable the LLM to complete all tasks that humans can perform and achieve self - iteration.
+
+### Core Settings
+Let the LLM generate JSON in a fixed format for operations to ensure the standardization and manageability of operations.
+
+## Project Structure
+- `main.py`: The entry file of the project, responsible for starting the main loop.
+- `main_cycle.py`: The core execution loop, which processes the LLM's responses and executes corresponding commands.
+- `brain/`: The core AI processing module, including PowerShell sessions, string templates, LLM API services, JSON parsers, and log services.
+- `logs/`: System operation logs, recording various operations and information during system operation.
+- `more_type/`: Provides more operation types for the AI to execute more complex tasks.
+
+## Future Plans
+- **Expand the Command Set**: Add more operation types to enable the LLM to perform more complex tasks.
+- **Enhance Self - Learning Ability**: Improve the LLM's self - learning ability to better adapt to different tasks and environments.
+- **Add More Complex Task Automation**: Implement more complex task automation to further improve work efficiency.
+
+## Usage
+The system accepts commands in JSON format and executes them in environments such as PowerShell. Here are some JSON examples for common operations:
+
+### Using the PowerShell Command Line
+```json
+{
+    "type": "powershell",
+    "command": "The command you want to execute",
+    "add_log": "Write to the log while executing the instruction"
+}
+```
+
+### Viewing Logs
+```json
+{
+    "type": "read_log",
+    "start": x,
+    "end": y,
+    "add_log": "Write to the log while executing the instruction"
+}
+```
+
+### Stopping Interaction
+```json
+{
+    "type": "exit",
+    "confirm": "true",
+    "add_log": "Write to the log while executing the instruction"
+}
+```
+
+## Local Deployment Method
+### Environment Preparation
+Ensure your system meets the following requirements:
+- **Operating System**: Windows 11
+- **Python Version**: Python 3.x
+- **Dependency Libraries**: Install the required dependency libraries according to the `requirements.txt` file. You can use the following command to install them:
+```bash
+pip install -r requirements.txt
+```
+
+### Configuring API Keys
+Configure the corresponding API key according to the LLM model you are using. For example, if you are using the DeepSeek model, you need to set the `DEEPSEEK_API_KEY` environment variable:
+```bash
+export DEEPSEEK_API_KEY=your_api_key
+```
+
+### Starting the Project
+In the project root directory, run the following command to start the project:
+```bash
+python main.py
+```
+
+### Running the Main Loop
+In the `main.py` file, you can set some parameters, such as `max_rounds` and `msg`, to control the operation of the main loop. For example:
+```python
+msg = '''
+If you first enter the command line, you will be in the main folder of this project.
+What you need to do:...
+'''
+
+xxx = main_cycle(log_path=r"logs\log_ai.txt")
+xxx.cycle(max_rounds=30, msg=msg)
+```
+
+## Contribution
+### If you want to fully understand the code, you can view the code in the following order:
+1. brain/LLM_api.py
+2. brain/String_Templates.py
+3. brain/powershell.py
+4. main_cycle.py
+
+### If you want to contribute to this project, please follow these steps:
+1. Fork this repository.
+2. Create a new branch: `git checkout -b feature/your-feature-name`.
+3. Commit your changes: `git commit -m 'Add some feature'`.
+4. Push to the branch: `git push origin feature/your-feature-name`.
+5. Submit a Pull Request.
+
+## License
+This project uses the [License Name] license. Please check the `LICENSE` file for more information.
+
+***-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------***
+
+# AI-win11-管理员 (中文)
+Click [AI-win11-Administrator (English)](#ai-win11-administrator-english) to switch to Chinese。
 
 ## 项目概述
 本项目旨在让大语言模型（LLM）能够操作Windows 11系统。通过一个可控的PowerShell接口，系统在保持稳定性的同时，允许AI执行各种任务。这为自动化操作Windows 11系统提供了可能，使得一些重复性的任务可以由AI自动完成，提高工作效率。
@@ -114,3 +234,6 @@ xxx.cycle(max_rounds=30, msg=msg)
 
 ## 许可证
 本项目采用[许可证名称]许可证。请查看`LICENSE`文件以获取更多信息。
+```
+
+This Markdown document provides both English and Chinese versions, with links at the beginning of each version to allow users to switch between languages easily.
