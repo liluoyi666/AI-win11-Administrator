@@ -67,21 +67,22 @@ def parse_json_blocks(text: str) -> list:
     return json_blocks
 if __name__ == "__main__":
     test_text = """
-    这是一些介绍文本
-    ```json
-    {
-        "name": "Alice",
-        "age": 30
-    }
-    ```
-    中间穿插的普通文本
-    ```json
-    {
-        "items": ["apple", "banana"],
-        "count": 2
-    }
-    ```
-    """
+{
+    "type": "TextEditor",
+    "pattern": "append",
+    "path": "test.txt",
+    "line1": "",
+    "line2": "## 使用方法",
+    "line3": "系统接受JSON格式的命令，并在PowerShell等环境中执行。以下是一些常见操作的JSON示例：",
+    "line4": "",
+    "line5": "### 使用PowerShell命令行",
+    "line6": "```",
+    "line7": "示例代码请见原始README.md文件",
+    "line8": "```",
+    "encoder": "utf-8",
+    "add_log": "向test.md文件追加简化的使用方法部分内容"
+}
+"""
 
-    result = parse_json_blocks(test_text)
+    result = json.loads(test_text)
     print(result)

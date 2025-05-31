@@ -10,6 +10,7 @@ from brain import create_client, get_response_from_llm
 from brain import extract_json_between_markers
 from brain import log
 
+from more_Types import Name_TextEditor,TextEditor_user_manual,TextEditor
 """
 while Ture:
     得到LLM响应->执行命令->输出传回LLM
@@ -38,6 +39,7 @@ class main_cycle:
         method["powershell"] = self.powershell.execute_command
         method["read_log"] = self.log.read
         method["exit"] = self.close
+        method[Name_TextEditor] = TextEditor.execute
 
         # 进入主循环
         while True:
@@ -50,7 +52,8 @@ class main_cycle:
                 Time=str(datetime.now(ZoneInfo("Asia/Shanghai"))),
                 num=self.round_num,
                 msg=msg
-            ) + grammar
+            ) + grammar + TextEditor_user_manual
+
             cmd_output = user_msg.format(
                 stdout= self.stdout,
                 stderr= self.stderr
