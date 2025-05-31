@@ -1,4 +1,5 @@
-﻿# AI-win11-Administrator Project
+﻿# AI-win11-Administrator
+# AI-win11-管理员
 
 ## 项目概述
 本项目旨在让大语言模型（LLM）能够操作Windows 11系统。通过一个可控的PowerShell接口，系统在保持稳定性的同时，允许AI执行各种任务。这为自动化操作Windows 11系统提供了可能，使得一些重复性的任务可以由AI自动完成，提高工作效率。
