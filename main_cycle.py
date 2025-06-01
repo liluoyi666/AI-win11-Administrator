@@ -31,7 +31,7 @@ class main_cycle:
         self.stderr = ''
         self.round_num = 0
 
-    def cycle(self,max_rounds=None,temperature=0.75,msg='无',
+    def cycle(self,language,max_rounds=None,temperature=0.75,msg='无',
               LLM_print=True, stderr_print=True, stdout_print=True):
 
         # 将所有type对应的操作方法存储在字典
@@ -49,6 +49,7 @@ class main_cycle:
             # 生成字符串，用于发送给ai
             system_msg = system_prompt.format(
                 user= self.user,
+                language=language,
                 Time=str(datetime.now(ZoneInfo("Asia/Shanghai"))),
                 num=self.round_num,
                 msg=msg
