@@ -63,16 +63,16 @@ class PowerShellSession:
 '''         # 请不要修改该字符串的换行
             # 组合命令
             self.process.stdin.write(full_cmd)      #输入
-            self.process.stdin.write(f"# 以上输出源于({beijing_time})开始执行的命令\n'{end_marker}'\n")
+            self.process.stdin.write(f"# 以上输出源于({beijing_time})开始执行的命令'{end_marker}'\n")
             self.process.stdin.flush()
 
             output = []
             while True:
                 try:
-                    line = self.stdout_queue.get(timeout=5)
+                    line = self.stdout_queue.get(timeout=10)
+                    output.append(line.strip())
                     if end_marker in line:
                         break
-                    output.append(line.strip())
 
                 except queue.Empty:
                     if time.time() - start_time > timeout:
