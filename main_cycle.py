@@ -40,7 +40,6 @@ class main_cycle:
         method["powershell"] = self.powershell.execute_command
         method["read_log"] = self.log.read
         method["exit"] = self.close
-        # 拓展操作类型
         method[Name_TextEditor] = TextEditor.execute
 
         # 进入主循环
