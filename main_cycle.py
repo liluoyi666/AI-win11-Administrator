@@ -18,7 +18,7 @@ while Ture:
 """
 
 class main_cycle:
-    def __init__(self,user='wqws',model_name="deepseek-coder",log_path=r"logs\log_ai.txt"):
+    def __init__(self,user='wqws',model_name="deepseek-reasoner",log_path=r"logs\log_ai.txt"):
         self.test_model = model_name
         self.user=user
 
@@ -40,6 +40,7 @@ class main_cycle:
         method["powershell"] = self.powershell.execute_command
         method["read_log"] = self.log.read
         method["exit"] = self.close
+        # 拓展操作类型
         method[Name_TextEditor] = TextEditor.execute
 
         # 进入主循环

@@ -33,7 +33,7 @@ import re
 
 
 def json_parser(llm_output):
-    # 匹配最外层且首次出现的```json...```代码块
+    # 请一定不要修改该字符串的任何地方，负责将会报错
     json_pattern = r"""```json
 {(.*?)}
 ```"""

@@ -47,7 +47,7 @@ class PowerShellSession:
         threading.Thread(target=reader, args=(self.stdout_queue, self.process.stdout), daemon=True).start()
         threading.Thread(target=reader, args=(self.stderr_queue, self.process.stderr), daemon=True).start()
 
-    def execute_command(self, command, timeout=10):
+    def execute_command(self, command, timeout=30):
         with self.lock:  # 确保命令顺序执行
             if self.process.poll() is not None:     #如果进程不存在
                 raise RuntimeError("PowerShell process is not running")
@@ -60,20 +60,20 @@ class PowerShellSession:
             start_time = time.time()
             beijing_time = datetime.now(ZoneInfo("Asia/Shanghai"))
             full_cmd = f'''{command}\n
-'''      #组合命令
+'''         # 请不要修改该字符串的换行
+            # 组合命令
             self.process.stdin.write(full_cmd)      #输入
-            self.process.stdin.write(f"# 该命令开始执行的时间{beijing_time}。end_marker'{end_marker}'\n")
+            self.process.stdin.write(f"# 以上输出源于({beijing_time})开始执行的命令\n'{end_marker}'\n")
             self.process.stdin.flush()
 
             output = []
             while True:
                 try:
-                    line = self.stdout_queue.get(timeout=3)
-                    # if end_marker in line:
-                    #     break
-                    output.append(line.strip())
+                    line = self.stdout_queue.get(timeout=5)
                     if end_marker in line:
                         break
+                    output.append(line.strip())
+
                 except queue.Empty:
                     if time.time() - start_time > timeout:
                         raise TimeoutError("Command execution timed out")
