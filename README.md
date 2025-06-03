@@ -89,13 +89,14 @@ python main.py
 
 ### Running the Main Loop
 In the `main.py` file, you can set some parameters, such as `max_rounds` and `msg`, to control the operation of the main loop. For example:
+
 ```python
 msg = '''
 If you first enter the command line, you will be in the main folder of this project.
 What you need to do:...
 '''
 
-xxx = main_cycle(log_path=r"logs\log_ai.txt")
+xxx = main_cycle(log_path=r"logs/log_ai_executor.txt")
 xxx.cycle(max_rounds=30, msg=msg)
 ```
 
@@ -208,13 +209,14 @@ python main.py
 
 ### 运行主循环
 在`main.py`文件中，你可以设置一些参数，如`max_rounds`和`msg`，来控制主循环的运行。例如：
+
 ```python
 msg = '''
 如果刚开始进入命令行，你会出现在该项目的主文件夹中。
 你需要做：...
 '''
 
-xxx = main_cycle(log_path=r"logs\log_ai.txt")
+xxx = main_cycle(log_path=r"logs/log_ai_executor.txt")
 xxx.cycle(max_rounds=30, msg=msg)
 ```
 

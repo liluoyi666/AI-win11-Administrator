@@ -15,7 +15,7 @@ def work():
 
     language="Chinese"
 
-    system = main_cycle(model_name="deepseek-chat",log_path=r"logs\log_ai.txt")
+    system = main_cycle(model_name="deepseek-chat", log_path=r"logs/log_ai_executor.txt")
     system.cycle(language=language,max_rounds=100,msg=msg)
 
 if __name__ =="__main__":
