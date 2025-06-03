@@ -6,7 +6,7 @@ def work():
     # What you want to say to AI, what you want AI to do, Please write below.
 
     msg = '''
-当前文件夹下有个Developer_Guide.md，读取它，制作他的英文版，并追加在其后面。
+展示读取文件README.md
 '''
 
 

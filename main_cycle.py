@@ -42,7 +42,7 @@ class main_cycle:
         method["exit"] = self.close
         method[Name_TextEditor] = TextEditor.execute
 
-        grammar= grammar + TextEditor_user_manual
+        Grammar= grammar + TextEditor_user_manual
 
         # 进入主循环
         while True:
@@ -54,7 +54,7 @@ class main_cycle:
                 Time=str(datetime.now(ZoneInfo("Asia/Shanghai"))),
                 num=self.round_num,
                 msg=msg
-            ) + grammar
+            ) + Grammar
 
             cmd_output = user_msg.format(
                 stdout= self.stdout,
