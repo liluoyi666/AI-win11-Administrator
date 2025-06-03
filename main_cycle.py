@@ -30,7 +30,7 @@ class main_cycle:
         self.llm_result = None
         self.stdout = ''
         self.stderr = ''
-        self.round_num = 0
+        self.round_num = 1
 
     def cycle(self,language,max_rounds=None,temperature=0.75,msg='无',
               LLM_print=True, stderr_print=True, stdout_print=True):
@@ -42,10 +42,10 @@ class main_cycle:
         method["exit"] = self.close
         method[Name_TextEditor] = TextEditor.execute
 
+        grammar= grammar + TextEditor_user_manual
+
         # 进入主循环
         while True:
-            self.round_num+=1
-            print(self.round_num,'----------------------------------------------------------------------\n\n')
 
             # 生成字符串，用于发送给ai
             system_msg = system_prompt.format(
@@ -54,7 +54,7 @@ class main_cycle:
                 Time=str(datetime.now(ZoneInfo("Asia/Shanghai"))),
                 num=self.round_num,
                 msg=msg
-            ) + grammar + TextEditor_user_manual
+            ) + grammar
 
             cmd_output = user_msg.format(
                 stdout= self.stdout,
@@ -101,6 +101,7 @@ class main_cycle:
             # 如果json无法解析
             else:
                 self.stderr=error_msg
+                continue
 
             if stdout_print:
                 print('输出:\n',self.stdout)
@@ -109,10 +110,13 @@ class main_cycle:
 
             time.sleep(3)
             if max_rounds is not None and self.round_num==max_rounds:
-                break;
+                return
 
             if self.stdout=="<__exit__>":
                 return
+
+            self.round_num+=1
+            print(self.round_num,'----------------------------------------------------------------------\n\n')
 
     # 关闭方法
     def close(self,msg):
@@ -131,4 +135,4 @@ if __name__ =="__main__":
 '''
 
     xxx=main_cycle()
-    xxx.cycle(max_rounds=30,msg=msg)
+    xxx.cycle(language="zh",max_rounds=30,msg=msg)

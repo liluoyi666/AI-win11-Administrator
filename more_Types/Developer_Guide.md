@@ -56,7 +56,7 @@ class main_cycle:
 
 ### 7. Around line 40 of [<u>***main_cycle.py***</u>](../main_cycle.py), add your operation method to the dictionary. Ensure the value is a function or class method, not the class itself:
 ```python
-    def cycle(self, language, max_rounds=None, temperature=0.75, msg='No message',
+    def cycle(self,language,max_rounds=None,temperature=0.75,msg='无',
               LLM_print=True, stderr_print=True, stdout_print=True):
 
         method = {}
@@ -66,21 +66,18 @@ class main_cycle:
         method[Name_TextEditor] = TextEditor.execute
         # -> Add here. Key is name, value is function/class method (no parentheses)
         
-        while True:
+        grammar= grammar + TextEditor_user_manual
 ```
 
-### 8. Around line 57 of [<u>***main_cycle.py***</u>](../main_cycle.py), concatenate your operation manual to the AI prompt:
+### 8. Around line 45 of [<u>***main_cycle.py***</u>](../main_cycle.py), concatenate your operation manual to the AI prompt:
 ```python
-            system_msg = system_prompt.format(
-                user=self.user,
-                language=language,
-                Time=str(datetime.now(ZoneInfo("Asia/Shanghai"))),
-                num=self.round_num,
-                msg=msg
-            ) + grammar + TextEditor_user_manual  # -> Concatenate here using "+"
-
-            cmd_output = user_msg.format(
-                stdout=self.stdout,
+        method["exit"] = self.close
+        method[Name_TextEditor] = TextEditor.execute
+        
+        grammar= grammar + TextEditor_user_manual # -> Concatenate here using "+"
+        
+        while True:
+            self.round_num+=1 
 ```
 
 ### 9. Once everything is ready, you can start running the system.
@@ -156,21 +153,19 @@ class main_cycle:
         method[Name_TextEditor] = TextEditor.execute
         # ->就是在这里，key是名字，value是函数或类的方法，请不要保留函数或方法的括号
         
-        while True:
+        grammar= grammar + TextEditor_user_manual
 ```
 
-### 8. 大概在[<u>***main_cycle.py***</u>](../main_cycle.py)第57行，把你的操作手册连接在给AI的提示词后面:
+### 8. 大概在[<u>***main_cycle.py***</u>](../main_cycle.py)第45行，把你的操作手册连接在给AI的提示词后面:
 ```python
-            system_msg = system_prompt.format(
-                user= self.user,
-                language=language,
-                Time=str(datetime.now(ZoneInfo("Asia/Shanghai"))),
-                num=self.round_num,
-                msg=msg
-            ) + grammar + TextEditor_user_manual# ->就是这里，使用"+"连接你的操作手册
+        method["exit"] = self.close
+        method[Name_TextEditor] = TextEditor.execute
+        
+        grammar= grammar + TextEditor_user_manual  # ->就是这里，使用"+"连接你的操作手册
+        
+        while True:
+            self.round_num+=1
 
-            cmd_output = user_msg.format(
-                stdout= self.stdout,
 ```
 
 ### 9. 在一切准备就绪之后，你就可以开始运行了。
