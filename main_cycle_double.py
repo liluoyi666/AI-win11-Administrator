@@ -18,7 +18,7 @@ while Ture:
     得到LLM响应->执行命令->输出传回LLM
 """
 
-class main_cycle:
+class main_cycle_double:
     def __init__(self,user='wqws',model_name="deepseek-chat",system="win11",
                  executor_log_path=r"logs\log_ai_executor.txt",supervisor_log_path=r"logs\log_ai_supervisor.txt"):
         self.test_model = model_name
@@ -211,5 +211,5 @@ if __name__ =="__main__":
 如果驳回成功，请在日志中记录
 '''
 
-    xxx=main_cycle()
+    xxx=main_cycle_double()
     xxx.cycle(language="zh",max_rounds=30,msg=msg)

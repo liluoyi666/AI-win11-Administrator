@@ -17,7 +17,7 @@ while Ture:
     得到LLM响应->执行命令->输出传回LLM
 """
 
-class main_cycle:
+class main_cycle_single:
     def __init__(self,user='wqws',model_name="deepseek-chat"
                                              "",log_path=r"logs\log_ai_executor.txt"):
         self.test_model = model_name
@@ -135,5 +135,5 @@ if __name__ =="__main__":
 如果没有报错，README.md的英文部分全部抄入。
 '''
 
-    xxx=main_cycle()
+    xxx=main_cycle_single()
     xxx.cycle(language="zh",max_rounds=30,msg=msg)
