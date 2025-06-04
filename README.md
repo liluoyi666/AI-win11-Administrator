@@ -47,7 +47,7 @@ AI output must contain JSON in the following format. The system detects AI outpu
     "add_log": "log_entry_written_during_operation"
 }
 ```
-The `type` key must always be present. Other keys depend on the specific operation type. The absence of `add_log` doesn't affect operation execution, and its presence doesn't interfere with any operation type. Log entries automatically include timestamps and line breaks. Log files are automatically maintained by the system.
+The "type" key must always be present. Other keys depend on the specific operation type. The absence of `add_log` doesn't affect operation execution, and its presence doesn't interfere with any operation type. Log entries automatically include timestamps and line breaks. Log files are automatically maintained by the system.
 ### Command Execution Principle
 The system's core execution loop (`main_cycle.py`) receives LLM responses and parses the contained JSON. Based on the `type` key, it invokes corresponding operation methods. For example:
 - If `type` is `powershell`, it executes PowerShell commands using the `PowerShellSession.execute_command()` method
