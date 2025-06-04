@@ -1,7 +1,9 @@
 from .powershell import PowerShellSession     # powershell服务
 
-from .String_Templates import executor_system_prompt,executor_grammar,executor_user_msg,error_msg
-from .String_Templates import supervisor_system_prompt,supervisor_user_msg,supervisor_grammar
+from .String_Templates_double import executor_system_prompt,executor_grammar,executor_user_msg,error_msg
+from .String_Templates_double import supervisor_system_prompt,supervisor_user_msg,supervisor_grammar
+
+from .String_Templates_single import system_prompt, grammar, user_msg
 
 from .LLM_api import create_client,get_response_from_llm    # LLM的api服务
 
@@ -10,9 +12,10 @@ from .json_parser import extract_json_between_markers,json_parser       # json�
 from .log_editor import log      # 日志服务
 
 
-__all__ = ( PowerShellSession,
-            executor_system_prompt,executor_grammar,executor_user_msg,error_msg,
-            supervisor_system_prompt,supervisor_user_msg,supervisor_grammar,
-            create_client,get_response_from_llm,json_parser,
-            extract_json_between_markers,
-            log)
+__all__ = ( PowerShellSession,                                                      # powershell组件
+            executor_system_prompt,executor_grammar,executor_user_msg,error_msg,    # 执行者提示词
+            supervisor_system_prompt,supervisor_user_msg,supervisor_grammar,        # 监察者提示词
+            system_prompt, grammar, user_msg,                                       # 单AI模式提示词
+            create_client,get_response_from_llm,                                    # API
+            extract_json_between_markers,json_parser,                               # json解析器
+            log)                                                                    # 日志

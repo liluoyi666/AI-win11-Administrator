@@ -1,4 +1,4 @@
-from main_cycle import main_cycle
+from main_cycle_double import main_cycle
 
 def work():
 
