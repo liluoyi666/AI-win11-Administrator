@@ -5,7 +5,7 @@ import json
 import time
 
 from brain import PowerShellSession
-from brain import system_prompt, grammar, user_msg,error_msg
+from brain import system_prompt, executor_grammar, user_msg, error_msg
 from brain import create_client, get_response_from_llm
 from brain import extract_json_between_markers,json_parser
 from brain import log
@@ -18,10 +18,11 @@ while Ture:
 """
 
 class main_cycle_single:
-    def __init__(self,user='wqws',model_name="deepseek-chat",
+    def __init__(self,user='wqws',system='win11',model_name="deepseek-chat",
                  log_path=r"logs\log_ai_executor.txt"):
         self.test_model = model_name
         self.user=user
+        self.system=system
 
         self.powershell = PowerShellSession()                         # 创建powershell
         self.client, self.test_model = create_client(self.test_model) # 创建客户端
@@ -43,21 +44,23 @@ class main_cycle_single:
         method["exit"] = self.close
         method[Name_TextEditor] = TextEditor.execute
 
-        Grammar= grammar + TextEditor_user_manual
+        Grammar= executor_grammar + TextEditor_user_manual
 
         # 进入主循环
         while True:
 
             # 生成字符串，用于发送给ai
-            system_msg = system_prompt.format(
+            system_msg = system_prompt(
                 user= self.user,
+                system=self.system,
                 language=language,
-                Time=str(datetime.now(ZoneInfo("Asia/Shanghai"))),
+                time=str(datetime.now(ZoneInfo("Asia/Shanghai"))),
                 num=self.round_num,
-                msg=msg
-            ) + Grammar
+                msg=msg,
+                grammar=Grammar
+            )
 
-            cmd_output = user_msg.format(
+            cmd_output = user_msg(
                 stdout= self.stdout,
                 stderr= self.stderr
             )
@@ -129,9 +132,7 @@ class main_cycle_single:
 
 if __name__ =="__main__":
     msg='''
-如果刚开始进入命令行，你会出现在该项目的主文件夹中。
-请你尝试使用TextEditor的操作方法，读取README.md文件，并将42到48行抄写到test.txt。
-如果没有报错，README.md的英文部分全部抄入。
+尝试读取本项目的自述文件
 '''
 
     xxx=main_cycle_single()
