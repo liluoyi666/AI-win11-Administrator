@@ -1,9 +1,9 @@
 from .powershell import PowerShellSession     # powershell服务
 
-from .String_Templates_double import executor_system_prompt,executor_grammar,executor_user_msg,error_msg
-from .String_Templates_double import supervisor_system_prompt,supervisor_user_msg,supervisor_grammar
+from .prompts import executor_system_prompt,executor_grammar,executor_user_msg,error_msg
+from .prompts import supervisor_system_prompt,supervisor_user_msg,supervisor_grammar
 
-from .String_Templates_single import system_prompt, grammar, user_msg
+from .prompts import system_prompt, grammar, user_msg
 
 from .LLM_api import create_client,get_response_from_llm    # LLM的api服务
 

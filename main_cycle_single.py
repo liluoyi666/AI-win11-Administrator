@@ -18,8 +18,8 @@ while Ture:
 """
 
 class main_cycle_single:
-    def __init__(self,user='wqws',model_name="deepseek-chat"
-                                             "",log_path=r"logs\log_ai_executor.txt"):
+    def __init__(self,user='wqws',model_name="deepseek-chat",
+                 log_path=r"logs\log_ai_executor.txt"):
         self.test_model = model_name
         self.user=user
 
@@ -85,7 +85,6 @@ class main_cycle_single:
                     print("API调用限额已用尽，请稍后重试")
 
             now_time = str(datetime.now(ZoneInfo("Asia/Shanghai")))[:19]
-            # result_json= extract_json_between_markers(self.llm_result)
             result_json= json_parser(self.llm_result)
 
             # 如果json解析成功
