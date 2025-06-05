@@ -47,7 +47,7 @@ AI output must contain JSON in the following format. The system detects AI outpu
     "add_log": "log_entry_written_during_operation"
 }
 ```
-The `type` key must always be present. Other keys depend on the specific operation type. The absence of `add_log` doesn't affect operation execution, and its presence doesn't interfere with any operation type. Log entries automatically include timestamps and line breaks. Log files are automatically maintained by the system.
+The "type" key must always be present. Other keys depend on the specific operation type. The absence of "add_log" doesn't affect operation execution, and its presence doesn't interfere with any operation type. Log entries automatically include timestamps and line breaks. Log files are automatically maintained by the system.
 ### Command Execution Principle
 The system's core execution loop (`main_cycle.py`) receives LLM responses and parses the contained JSON. Based on the `type` key, it invokes corresponding operation methods. For example:
 - If `type` is `powershell`, it executes PowerShell commands using the `PowerShellSession.execute_command()` method
@@ -76,6 +76,7 @@ This architecture improves system stability, security, and enhances user interac
 - **Mid Stage**: Add more data type interfaces; enable autonomous completion of simple projects
 - **Final Stage**: Achieve non-VM deployment; enable safe completion of 50% of human computer tasks
 </br>
+
 ### Extended Plan
 - **Initial Stage**: Achieve stable dual-AI command execution
 - **Early Stage**: Implement seamless switching between work and conversation modes
@@ -211,6 +212,7 @@ AI的输出需包含以下格式的json，系统会检测AI的输出，并将提
 - **中期阶段**：增加更多数据类型接口，尝试让LLM自主完成某些简单项目。
 - **最终阶段**：实现非虚拟机部署，让LLM安全稳定地完成人类50%的计算机任务。
 </br>
+
 ### 分支计划
 - **起步阶段**：实现双AI命令执行系统稳定运行。
 - **初期阶段**：实现工作状态与对话状态的自由切换，既可与用户对话，也可以操作计算机。
