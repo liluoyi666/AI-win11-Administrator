@@ -38,6 +38,14 @@ The Dual-AI architecture utilizes two AIs for mutual supervision and collaborati
 - **Seamless Switching Between Single-AI and Dual-AI Modes**: Allows mode selection based on security requirements and economic constraints to accommodate different user needs.
 
 ## AI Command Format and Command Execution Principles
+### Operation Flow
+```
+While True:
+    The AI generates a JSON based on the message returned by the system in the previous round
+    The system parses the instructions in the JSON and executes them
+    Retain the information returned by the system during execution and return it to the AI in the next round
+```
+
 ### Command Format
 AI output must contain JSON in the following format. The system detects AI output, extracts commands, and executes them on the computer:
 ```json
@@ -88,6 +96,7 @@ This architecture improves system stability, security, and enhances user interac
 - **Added file I/O methods (100-line text batch writing)**
 - **Improved JSON parser (significantly reduced error rate)**
 - **Dual-AI architecture operational**
+- **It can identify multiple JSOns in the input at one time**
 
 ## Local Deployment
 ### Environment Setup
@@ -181,6 +190,14 @@ Click [AI-win11-Administrator (English)](#ai-win11-administrator-english) to swi
 - **单AI模式与双AI模式自由切换**：根据安全需求与经济条件选择模式，以适应不同用户需求。
 
 ## AI命令格式与命令执行的原理
+### 运行流程
+```
+while True:
+    AI通过上一轮系统返回的消息，生成json
+    系统解析json中的指令，并执行
+    保留执行时系统返回的信息，下一轮返回给AI
+```
+
 ### 命令格式
 AI的输出需包含以下格式的json，系统会检测AI的输出，并将提取出命令，在计算机中执行：
 ```json
@@ -224,6 +241,7 @@ AI的输出需包含以下格式的json，系统会检测AI的输出，并将提
 - **增加了文件读写方法，实现100行文本一次写入**
 - **修改了json解析器，大大降低报错率**
 - **双AI架构初步运行成功**
+- **能够一次检测多个json，并按顺序运行，大大提高操作效率**
 
 ## 本地部署方法
 ### 环境准备
