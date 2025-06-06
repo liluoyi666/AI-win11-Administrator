@@ -22,6 +22,7 @@ The Dual-AI architecture utilizes two AIs for mutual supervision and collaborati
 - [Local Deployment](#local-deployment)
 - [Contribution](#contribution)
 - [License](#license)
+- [Developer Message](#developer-message)
 
 ## Project Structure
 - `main.py`: Entry point of the project, responsible for launching the main loop.
@@ -149,6 +150,13 @@ xxx.cycle(max_rounds=30, msg=msg)
 ## License
 This project is licensed under [License Name]. See `LICENSE` for details.
 
+## Developer Message:
+I fully understand that deploying on a virtual machine can solve over 80% of security concerns. However, we also recognize that we cannot force all users to install virtualization software. Moreover, if the AI cannot directly operate on the user's computer, the practical functionality of this software would be significantly diminished—at least halved. What I mean is that we must consider the security of this software under the premise of abandoning virtual machine deployment; otherwise, the development of this software would become meaningless.  
+</br>
+
+Prohibiting the AI from running `rm` commands is like plugging one's ears while stealing a bell—the AI could easily wrap destructive commands within scripts for execution. Besides, sometimes `rm` might only be used to clean up junk files. It's impossible to prevent the AI from causing harm through hard-coded restrictions alone. The only thing capable of stopping an AI is a counterpart with comparable intelligence. This is precisely why I introduced the dual-AI "executor-supervisor" architecture.
+
+
 ### ---------------------------------------------------------------------------------------------------------------
 
 # AI-win11-管理员 (中文)
@@ -174,6 +182,7 @@ Click [AI-win11-Administrator (English)](#ai-win11-administrator-english) to swi
 - [本地部署方法](#本地部署方法)
 - [贡献](#贡献)
 - [许可证](#许可证)
+- [开发者留言](#开发者留言)
 
 ## 项目结构
 - `main.py`：项目的入口文件，负责启动主循环。
@@ -217,6 +226,7 @@ AI的输出需包含以下格式的json，系统会检测AI的输出，并将提
 它直接接收用户的留言，根据内置的规则和操作手册，将用户的需求转化为具体的操作命令，并通过 PowerShell 接口执行这些命令。
 
 ### 双AI架构
+
 设定两个AI：执行者AI与监察者AI，执行者负责编写命令以完成用户的目标，监察者当前负责决定是否应该执行执行者的命令，并为执行者提供思路与解决方案。
 双方的日志分别独立，执行者的所有输出对监察者完全公开，监察者的输出只有部分向执行者分开。
 后续为了平衡执行者和监察者的操作权限，还会进行进一步的平衡性调整，进一步修改其可执行命令。
@@ -294,6 +304,15 @@ xxx.cycle(max_rounds=30, msg=msg)
 
 ## 许可证
 本项目采用[许可证名称]许可证。请查看`LICENSE`文件以获取更多信息。
+
+## 开发者留言：
+开发者很清楚，虚拟机部署能够解决80%以上的安全问题。但我们也明白，我们不可能逼迫所有用户都安装虚拟机软件。而且，如果AI无法直接操作用户的计算机，这个软件的实用性功能至少要减一半。开发者的意思是，我们必须要在抛弃虚拟机部署这一前提下，考虑这个软件的安全性，否则这个软件的开发将变得没有意义。
+</br>
+
+禁止AI运行rm指令就像是掩耳盗铃，AI完全可以把破坏指令包装成脚本再运行，而且有时候rm也可能只用于清理垃圾文件。通过硬编码完全不可能阻止AI做坏事，能阻止AI的只有与其拥有同等智商的东西，因此，开发者们推出了双AI"执行者-监察者"架构。
+
 ```
+
+
 
 This Markdown document provides both English and Chinese versions, with links at the beginning of each version to allow users to switch between languages easily.
