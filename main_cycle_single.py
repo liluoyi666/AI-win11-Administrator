@@ -7,14 +7,16 @@ import time
 from brain import PowerShellSession
 from brain import system_prompt, executor_grammar, user_msg, error_msg
 from brain import create_client, get_response_from_llm
-from brain import extract_json_between_markers,json_parser
+from brain import json_parser,json_parser_push
 from brain import log
 
 from more_Types import Name_TextEditor,TextEditor_user_manual,TextEditor
 
 """
 while Ture:
-    得到LLM响应->执行命令->输出传回LLM
+    得到LLM响应
+    执行命令
+    输出传回LLM
 """
 
 class main_cycle_single:
@@ -33,6 +35,9 @@ class main_cycle_single:
         self.stdout = ''
         self.stderr = ''
         self.round_num = 1
+
+        self.exit=0
+        print('系统初始化完成----------------------------------------------------------------------')
 
     def cycle(self,language,max_rounds=None,temperature=0.75,msg='无',
               LLM_print=True, stderr_print=True, stdout_print=True):
@@ -64,8 +69,6 @@ class main_cycle_single:
                 stdout= self.stdout,
                 stderr= self.stderr
             )
-            self.stdout = 'None'
-            self.stderr = 'None'
 
             # 尝试得到ai的响应
             try:
@@ -88,34 +91,42 @@ class main_cycle_single:
                     print("API调用限额已用尽，请稍后重试")
 
             now_time = str(datetime.now(ZoneInfo("Asia/Shanghai")))[:19]
-            result_json= json_parser(self.llm_result)
+            result_json = json_parser_push(self.llm_result)
 
-            # 如果json解析成功
-            if result_json is not None and "type" in result_json:
-                Type=result_json["type"]
+            self.stdout = ''
+            self.stderr = ''
 
-                if "add_log" in result_json:
-                    print(result_json["add_log"].strip())
-                    self.log.write(time=now_time, msg=result_json["add_log"].strip())
+            # 执行列表中的所有指令
+            for id,cmd in enumerate(result_json):
+                stdout = 'Empty'
+                stderr = 'Empty'
+                # 如果json解析成功
+                if cmd is not None and "type" in cmd:
 
-                # 根据Type选择相应的方法，并进行操作
-                self.stdout,self.stderr = method[Type](result_json)
+                    if "add_log" in cmd:
+                        self.log.write(time=now_time, msg=cmd["add_log"].strip())
 
-            # 如果json无法解析
-            else:
-                self.stderr=error_msg
-                continue
+                    # 根据Type选择相应的方法，并进行操作, 如果没有该Type, 使用报错函数
+                    Type = cmd["type"]
+                    stdout, stderr = method.get(Type, self.none)(cmd)
+
+                # 如果json无法解析
+                else:
+                    stderr = error_msg
+
+                self.stdout += f'第{id + 1}条json的输出:\n{stdout}\n'
+                self.stderr += f'第{id + 1}条json的报错:\n{stderr}\n'
 
             if stdout_print:
                 print('输出:\n',self.stdout)
             if stderr_print:
                 print('错误:\n',self.stderr)
 
-            time.sleep(3)
+            time.sleep(1)
             if max_rounds is not None and self.round_num==max_rounds:
                 return
 
-            if self.stdout=="<__exit__>":
+            if self.exit==1:
                 return
 
             self.round_num+=1
@@ -126,13 +137,19 @@ class main_cycle_single:
         if msg["confirm"]=="true":
             self.log.flush_buffer()
             self.powershell.close()
-            return "<__exit__>",""
+            self.exit=1
+            return "停止工作",""
         else:
             return "","未确认关闭"
 
+    def none(self,msg):
+        return "","使用了不存在的type，请重试"
+
 if __name__ =="__main__":
     msg='''
-尝试读取本项目的自述文件
+我修改了json的解析方法，你现在可以在一次输入中包含多个json，系统会按顺序执行json中的命令。
+你先获取当前文件夹位置。
+然后请你尝试在一次输入中，连续创建并写入三个文件，在当前文件夹，下一次输入一次性读取这些文件
 '''
 
     xxx=main_cycle_single()

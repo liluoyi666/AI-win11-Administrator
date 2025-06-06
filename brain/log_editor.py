@@ -3,13 +3,17 @@
 """
 
 class log:
-    def __init__(self, filename):
+    def __init__(self, filename,num=10):
         self.filename = filename
         self.buffer = []  # 缓存待写入的日志行
+        self.max_buffer_size = num
 
     def write(self, time, msg):
         content=f"[{time}]- {msg}"
         self.buffer.append(content + '\n')  # 自动添加换行符
+
+        if len(self.buffer) >= self.max_buffer_size:
+            self.flush_buffer()
 
     def read(self,json:dict):
         self.flush_buffer()

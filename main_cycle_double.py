@@ -8,14 +8,17 @@ from brain import PowerShellSession
 from brain import executor_system_prompt,executor_grammar,executor_user_msg,error_msg
 from brain import supervisor_system_prompt,supervisor_user_msg,supervisor_grammar
 from brain import create_client, get_response_from_llm
-from brain import extract_json_between_markers,json_parser
+from brain import json_parser,json_parser_push
 from brain import log
 
 from more_Types import Name_TextEditor,TextEditor_user_manual,TextEditor
 
 """
 while Ture:
-    得到LLM响应->执行命令->输出传回LLM
+    得到执行者响应
+    监察者确认
+    执行命令
+    输出传回LLM
 """
 
 class main_cycle_double:
@@ -43,6 +46,7 @@ class main_cycle_double:
         self.stderr = ''
         self.round_num = 1
 
+        self.exit=0
         print('系统初始化完成----------------------------------------------------------------------')
 
 
@@ -69,7 +73,7 @@ class main_cycle_double:
                 time=str(datetime.now(ZoneInfo("Asia/Shanghai"))),
                 num=self.round_num,
                 msg=msg,
-                executor_grammar=executor_grammar
+                executor_grammar=Grammar
             )
             executor_last_round_output = executor_user_msg(
                 stdout= self.stdout,
@@ -163,32 +167,42 @@ class main_cycle_double:
                 continue
 
             now_time = str(datetime.now(ZoneInfo("Asia/Shanghai")))[:19]
-            executor_result_json= json_parser(self.executor_result)
+            result_json = json_parser_push(self.executor_result)
 
-            # 如果json解析成功
-            if executor_result_json is not None and "type" in executor_result_json:
-                Type=executor_result_json["type"]
+            self.stdout = ''
+            self.stderr = ''
 
-                if "add_log" in executor_result_json:
-                    self.executor_log.write(time=now_time, msg=executor_result_json["add_log"].strip())
+            # 执行列表中的所有指令
+            for id,cmd in enumerate(result_json):
+                stdout = 'Empty'
+                stderr = 'Empty'
+                # 如果json解析成功
+                if cmd is not None and "type" in cmd:
 
-                # 根据Type选择相应的方法，执行指令
-                self.stdout,self.stderr = method[Type](executor_result_json)
+                    if "add_log" in cmd:
+                        self.executor_log.write(time=now_time, msg=cmd["add_log"].strip())
 
-            # 如果json无法解析
-            else:
-                self.stderr=error_msg
+                    # 根据Type选择相应的方法，并进行操作, 如果没有该Type, 使用报错函数
+                    Type = cmd["type"]
+                    stdout, stderr = method.get(Type, self.none)(cmd)
+
+                # 如果json无法解析
+                else:
+                    stderr = error_msg
+
+                self.stdout += f'第{id + 1}条json的输出:\n{stdout}\n'
+                self.stderr += f'第{id + 1}条json的报错:\n{stderr}\n'
 
             if stdout_print:
                 print('输出:\n',self.stdout)
             if stderr_print:
                 print('错误:\n',self.stderr)
 
-            time.sleep(10)
+            time.sleep(1)
             if max_rounds is not None and self.round_num==max_rounds:
                 return
 
-            if self.stdout=="<__exit__>":
+            if self.exit==1:
                 return
 
             self.round_num+=1
@@ -200,9 +214,13 @@ class main_cycle_double:
             self.executor_log.flush_buffer()
             self.supervisor_log.flush_buffer()
             self.powershell.close()
-            return "<__exit__>",""
+            self.exit=1
+            return "停止工作",""
         else:
             return "","未确认关闭"
+
+    def none(self,msg):
+        return "","使用了不存在的type，请重试"
 
 if __name__ =="__main__":
     msg='''

@@ -7,7 +7,7 @@ from .prompts import system_prompt,  user_msg
 
 from .LLM_api import create_client,get_response_from_llm    # LLM的api服务
 
-from .json_parser import extract_json_between_markers,json_parser       # json解析器
+from .json_parser import json_parser,json_parser_push       # json解析器
 
 from .log_editor import log      # 日志服务
 
@@ -18,5 +18,5 @@ __all__ = ( PowerShellSession,                                                  
             system_prompt, user_msg,                                            # 单AI模式提示词
             supervisor_grammar, executor_grammar, error_msg,                    # 通用字符串
             create_client, get_response_from_llm,                               # API
-            extract_json_between_markers, json_parser,                          # json解析器
+            json_parser, json_parser_push,                                      # json解析器
             log)                                                                # 日志服务
