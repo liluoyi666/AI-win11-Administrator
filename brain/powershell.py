@@ -38,7 +38,10 @@ class PowerShellSession:
         # 定义一个用于读取的函数
         def reader(queue, stream):
             while True:
-                line = stream.readline()
+                try:
+                    line = stream.readline()
+                except Exception as e:
+                    line = f'<读取powershell时，该行出现错误[{e}]>'
                 if not line:  # 流关闭时退出循环
                     break
                 queue.put(line)
@@ -60,7 +63,7 @@ class PowerShellSession:
             start_time = time.time()
             beijing_time = datetime.now(ZoneInfo("Asia/Shanghai"))
             full_cmd = f'''{command}\n
-'''         # 请不要修改该字符串的换行
+'''# 请不要修改此处的换行
             # 组合命令
             self.process.stdin.write(full_cmd)      #输入
             self.process.stdin.write(f"# 以上输出源于({beijing_time})开始执行的命令'{end_marker}'\n")
