@@ -21,7 +21,7 @@ while Ture:
     输出传回LLM
 """
 
-class main_cycle_double:
+class main_cycle_dual:
     def __init__(self,user='wqws',language='En',model_name="deepseek-chat",system="win11",temperature=0.75,
                  executor_log_path=r"logs\log_ai_executor.txt",supervisor_log_path=r"logs\log_ai_supervisor.txt",
                  LLM_print=True, stdout_print=True, stderr_print=True):
@@ -245,5 +245,5 @@ if __name__ =="__main__":
 尝试读取README.md,然后将前二十行抄入到test.txt中
 '''
 
-    xxx=main_cycle_double(language="zh")
+    xxx=main_cycle_dual(language="zh")
     xxx.cycle(max_rounds=30,msg=msg)
