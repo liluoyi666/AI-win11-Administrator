@@ -25,13 +25,28 @@ The Dual-AI architecture utilizes two AIs for mutual supervision and collaborati
 - [Developer Message](#developer-message)
 
 ## Project Structure
-- `main.py`: Entry point of the project, responsible for launching the main loop.
-- `main_cycle_single.py`: Core execution loop for single-AI mode.
-- `main_cycle_double.py`: Core execution loop for dual-AI mode.
-- `brain/`: Core AI processing modules including PowerShell sessions, string templates, LLM API services, JSON parsers, and logging services.
-- `logs/`: System operation logs recording various actions and information during runtime.
-- `more_type/`: Provides additional operation types for the AI to perform more complex tasks.
+```
+AI-win11-Administrator:
+    main.py             # Main program entry point
+    work_cycle.py       # AI working cycle
 
+    dustbin/            # Recycle Bin
+    more_Types/         # More operation types
+
+    logs/:              # Logs
+        log_ai_executor.txt     # Executor AI logs
+        log_ai_supervisor.txt   # Supervisor AI logs
+    
+    brain/:             # Core functionality implementation
+        prompts/:               # AI prompts
+            String.py                   # Strings
+            String_Templates.py         # String templates
+        json_parser.py          # JSON parser
+        LLM_api.py              # API
+        log_editor.py           # Log service
+        powershell.py           # Command line
+
+```
 ## Core Features
 - **Structured JSON for PowerShell Execution**: Enables LLMs to execute PowerShell commands through specifically formatted JSON for system operations.
 - **Secure Virtual Machine Environment**: Deploys the program in a virtual machine to enhance system security and prevent host system damage from erroneous operations.
@@ -185,12 +200,28 @@ Click [AI-win11-Administrator (English)](#ai-win11-administrator-english) to swi
 - [开发者留言](#开发者留言)
 
 ## 项目结构
-- `main.py`：项目的入口文件，负责启动主循环。
-- `main_cycle_single.py`：单AI核心执行循环。
-- `main_cycle_double.py`：双AI核心执行循环。
-- `brain`/：核心 AI 处理模块，包含 PowerShell 会话、字符串模板、LLM API 服务、JSON 解析器和日志服务等。
-- `logs`/：系统操作日志，记录系统运行过程中的各种操作和信息。
-- `more_type`/：为 ai 提供更多的操作类型，从而执行更复杂的任务。
+```
+AI-win11-Administrator:
+    main.py             # 启动
+    work_cycle.py       # AI工作循环
+
+    dustbin/            # 垃圾箱
+    more_Types/         # 更多操作类型
+
+    logs/:              # 日志
+        log_ai_executor.txt     # 执行者AI日志
+        log_ai_supervisor.txt   # 监察者AI日志
+    
+    brain/:             # 核心功能实现
+        prompts/:               # AI提示词
+            String.py                   # 字符串
+            String_Templates.py         # 字符串模板
+        json_parser.py          # json解析器
+        LLM_api.py              # api
+        log_editor.py           # 日志服务
+        powershell.py           # 命令行
+
+```
 
 ## 核心特性
 - **结构化JSON执行PowerShell命令**：通过特定格式的JSON，LLM可以方便地执行PowerShell命令，实现对系统的操作。
