@@ -43,7 +43,7 @@ from .type_TextEditor import Name_TextEditor, TextEditor_user_manual, TextEditor
 __all__ = (Name_TextEditor, TextEditor_user_manual, TextEditor)
 #           Name               Usage Guide             Class Body
 ```
-### 6. Import these three elements in the project's main file [<u>***main_cycle.py***</u>](../main_cycle_dual.py):
+### 6. Import these three elements in the project's main file [<u>***main_cycle.py***</u>](../dustbin/main_cycle_dual.py):
 ```python
 from brain import log
 
@@ -54,7 +54,7 @@ class main_cycle:
     def __init__(self, user='wqws', model_name="deepseek-coder", log_path=r"logs\log_ai.txt"):
 ```
 
-### 7. Around line 57 of [<u>***main_cycle.py***</u>](../main_cycle_dual.py), add your operation method to the dictionary. Ensure the value is a function or class method, not the class itself:
+### 7. Around line 57 of [<u>***main_cycle.py***</u>](../dustbin/main_cycle_dual.py), add your operation method to the dictionary. Ensure the value is a function or class method, not the class itself:
 ```python
     def cycle(self,language,max_rounds=None,temperature=0.75,msg='无',
               LLM_print=True, stderr_print=True, stdout_print=True):
@@ -69,7 +69,7 @@ class main_cycle:
         grammar= grammar + TextEditor_user_manual
 ```
 
-### 8. Around line 59 of [<u>***main_cycle.py***</u>](../main_cycle_dual.py), concatenate your operation manual to the AI prompt:
+### 8. Around line 59 of [<u>***main_cycle.py***</u>](../dustbin/main_cycle_dual.py), concatenate your operation manual to the AI prompt:
 ```python
         method["exit"] = self.close
         method[Name_TextEditor] = TextEditor.execute
@@ -130,7 +130,7 @@ from .type_TextEditor import Name_TextEditor,TextEditor_user_manual,TextEditor
 __all__ = (Name_TextEditor,TextEditor_user_manual,TextEditor)
 #           名称              使用指南                类本体
 ```
-### 6. 在项目主文件夹的 [<u>***main_cycle.py***</u>](../main_cycle_dual.py)中导入这三个元素:
+### 6. 在项目主文件夹的 [<u>***main_cycle.py***</u>](../dustbin/main_cycle_dual.py)中导入这三个元素:
 ```python
 from brain import log
 
@@ -141,7 +141,7 @@ class main_cycle:
     def __init__(self,user='wqws',model_name="deepseek-coder",log_path=r"logs\log_ai.txt"):
 ```
 
-### 7. 大概在[<u>***main_cycle.py***</u>](../main_cycle_dual.py)第57，将你的操作方法添加到字典中，请确保在字典中的是一个函数或类的方法，而不是类本体:
+### 7. 大概在[<u>***main_cycle.py***</u>](../dustbin/main_cycle_dual.py)第57，将你的操作方法添加到字典中，请确保在字典中的是一个函数或类的方法，而不是类本体:
 ```python
     def cycle(self,language,max_rounds=None,temperature=0.75,msg='无',
               LLM_print=True, stderr_print=True, stdout_print=True):
@@ -156,7 +156,7 @@ class main_cycle:
         grammar= grammar + TextEditor_user_manual
 ```
 
-### 8. 大概在[<u>***main_cycle.py***</u>](../main_cycle_dual.py)第59行，把你的操作手册连接在给AI的提示词后面:
+### 8. 大概在[<u>***main_cycle.py***</u>](../dustbin/main_cycle_dual.py)第59行，把你的操作手册连接在给AI的提示词后面:
 ```python
         method["exit"] = self.close
         method[Name_TextEditor] = TextEditor.execute

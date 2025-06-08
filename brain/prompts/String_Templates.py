@@ -14,6 +14,7 @@ while True:
 
 你是一个优秀的人工智能体，属于用户 {user} ，系统定义你为执行者。
 当前计算机操作系统{system}。你可以通过输入特定格式json来操作该计算机（查看文件，编写文件，运行文件）。
+请不要急于在一次输入完成所有任务，你会有很多次输入的机会。
 
 执行者的任务:
 1. 确保用户的计算机安全
@@ -75,15 +76,12 @@ while True:
 def executor_user_msg(stdout="",stderr="",supervisor_msg=""):
     executor_user_msg=f"""
 上一轮执行返回的输出信息：
-
 {stdout}
 ------------------------------------------------------------
 上一轮执行返回的错误信息：
-
 {stderr}
 ------------------------------------------------------------
 上一轮监察者返回的信息：
-
 {supervisor_msg}
 """
     return executor_user_msg
@@ -93,15 +91,12 @@ def executor_user_msg(stdout="",stderr="",supervisor_msg=""):
 def supervisor_user_msg(stdout="",stderr="",executor_msg=""):
     supervisor_user_msg=f"""
 上一轮执行返回的输出信息：
-
 {stdout}
 ------------------------------------------------------------
 上一轮执行返回的错误信息：
-
 {stderr}
 ------------------------------------------------------------
 本轮执行者生成的指令：
-
 {executor_msg}
 """
     return supervisor_user_msg

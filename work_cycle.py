@@ -4,9 +4,12 @@ from zoneinfo import ZoneInfo
 import json
 import time
 
+from brain import executor_system_prompt,executor_user_msg
+from brain import supervisor_system_prompt,supervisor_user_msg
+
+from brain import executor_grammar,supervisor_grammar,error_msg,single_ai
+
 from brain import PowerShellSession
-from brain import executor_system_prompt,executor_grammar,executor_user_msg,error_msg
-from brain import supervisor_system_prompt,supervisor_user_msg,supervisor_grammar
 from brain import create_client, get_response_from_llm
 from brain import json_parser,json_parser_push
 from brain import log
@@ -21,7 +24,7 @@ while Ture:
     输出传回LLM
 """
 
-class main_cycle_dual:
+class work_cycle:
     def __init__(self,user='wqws',language='En',model_name="deepseek-chat",system="win11",temperature=0.75,
                  executor_log_path=r"logs\log_ai_executor.txt",supervisor_log_path=r"logs\log_ai_supervisor.txt",
                  LLM_print=True, stdout_print=True, stderr_print=True):
@@ -54,7 +57,7 @@ class main_cycle_dual:
         self.method = {}
         self.method["powershell"] = self.powershell.execute_command
         self.method["read_log"] = self.executor_log.read
-        self.method["exit"] = self.close
+        self.method["exit"] = self.Exit
         self.method[Name_TextEditor] = TextEditor.execute
 
         # AI用操作手册
@@ -63,19 +66,24 @@ class main_cycle_dual:
         print('系统初始化完成')
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def cycle(self,max_rounds=None,msg='无'):
+    def cycle(self,single_or_dual=1,max_rounds=None,msg='无'):
 
         # 进入主循环
         round_num = 1
         confirm = ''
         to_executor = ''
+        if single_or_dual==1:
+            to_executor = single_ai
         while True:
 
             # 获取AI的响应
             executor_result = self.get_result_executor(msg, round_num, confirm, to_executor)
 
-            # 生成字符串，用于发送给监察者ai
-            confirm,to_executor = self.get_result_supervisor(executor_result, round_num, msg)
+            # 如果使用双AI模式
+            if single_or_dual==2:
+                confirm,to_executor = self.get_result_supervisor(executor_result, round_num, msg)
+            else:
+                confirm, to_executor=["True",single_ai]
 
             if confirm=="False":
                 print("监察者进行了驳回")
@@ -86,12 +94,13 @@ class main_cycle_dual:
 
             time.sleep(1)
             if max_rounds is not None and round_num==max_rounds:
-                return
+                break
             if self.exit==1:
-                return
+                break
 
             round_num+=1
             print(round_num,'----------------------------------------------------------------------\n\n')
+        self.close()
 
 # ----------------------------------------------------------------------------------------------------------------------
     # 获取执行者响应
@@ -110,7 +119,6 @@ class main_cycle_dual:
             stderr=self.stderr,
             supervisor_msg = confirm + "\n" + to_executor
         )
-
         # 尝试得到ai的响应
         try:
             executor_result, self.executor_memory = get_response_from_llm(
@@ -226,15 +234,18 @@ class main_cycle_dual:
 
 # ----------------------------------------------------------------------------------------------------------------------
     # 关闭方法
-    def close(self,msg):
+    def Exit(self,msg):
         if msg["confirm"]=="true":
-            self.executor_log.flush_buffer()
-            self.supervisor_log.flush_buffer()
-            self.powershell.close()
             self.exit=1
             return "停止工作",""
         else:
             return "","未确认关闭"
+
+    # 完全关闭
+    def close(self):
+        self.executor_log.flush_buffer()
+        self.supervisor_log.flush_buffer()
+        self.powershell.close()
 
     # type不存在
     def none(self,msg):
@@ -242,8 +253,9 @@ class main_cycle_dual:
 
 if __name__ =="__main__":
     msg='''
-尝试读取README.md,然后将前二十行抄入到test.txt中
+先尝试读取README.md的信息，将其前20行的信息抄写到test.txt中。
 '''
 
-    xxx=main_cycle_dual(language="zh")
-    xxx.cycle(max_rounds=30,msg=msg)
+    xxx=work_cycle(language="zh")
+    xxx.cycle(single_or_dual=1,max_rounds=5,msg=msg)
+    xxx.close()

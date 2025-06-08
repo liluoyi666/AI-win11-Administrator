@@ -48,7 +48,7 @@ class main_cycle_single:
         self.method = {}
         self.method["powershell"] = self.powershell.execute_command
         self.method["read_log"] = self.log.read
-        self.method["exit"] = self.close
+        self.method["exit"] = self.exit
         self.method[Name_TextEditor] = TextEditor.execute
 
         # AI用操作手册
@@ -70,12 +70,13 @@ class main_cycle_single:
             time.sleep(1)
 
             if max_rounds is not None and round_num==max_rounds:
-                return
+                break
             if self.exit==1:
-                return
+                break
 
             round_num+=1
             print(round_num,'---------------------------------------------------------------------------------\n\n')
+        self.close()
 
 # ----------------------------------------------------------------------------------------------------------------------
     # 获取执行者响应
@@ -151,15 +152,18 @@ class main_cycle_single:
             print('错误:\n', self.stderr)
 
 # ----------------------------------------------------------------------------------------------------------------------
-    # 关闭方法
-    def close(self,msg):
+    # 退出工作状态
+    def exit(self,msg):
         if msg["confirm"]=="true":
-            self.log.flush_buffer()
-            self.powershell.close()
             self.exit=1
             return "停止工作",""
         else:
             return "","未确认关闭"
+
+    # 完全关闭
+    def close(self):
+        self.log.flush_buffer()
+        self.powershell.close()
 
     # type不存在
     def none(self,msg):

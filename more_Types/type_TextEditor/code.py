@@ -167,7 +167,7 @@ if __name__ == "__main__":
         "type": "TextEditor",
         "pattern": "read",
         "path": "C:/AI-win11-Administrator/more_Types/type_TextEditor/test.txt",
-        "number": True
+        "number": "false"
     }
 
     # 示例write操作

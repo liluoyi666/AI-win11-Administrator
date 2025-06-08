@@ -21,11 +21,11 @@ TextEditor_user_manual=r"""
         "len": 10,              # 读取多少行，无该键或没这么多行可读则默认读取所有
         "encoder": "utf-8"      # 无该键则默认utf-8
     }
-    如果"number": "True"，则输出:
+    如果"number": "True"，则默认在每行前添加x>>，例如:
     1>>你还好吗？
     2>>是的，我很好，怎么了。
     3>>没什么。
-    如果为"False"则无编号和>>。
+    如果为"false"则无编号和>>。
     </read>
     
     <write>
