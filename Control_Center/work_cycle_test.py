@@ -4,14 +4,19 @@ from zoneinfo import ZoneInfo
 import json
 import time
 
+from brain import executor_system_prompt,executor_user_msg
+from brain import supervisor_system_prompt,supervisor_user_msg
+
+from brain import executor_grammar,supervisor_grammar,error_msg,single_ai
+
 from brain import PowerShellSession
-from brain import executor_system_prompt,executor_grammar,executor_user_msg,error_msg
-from brain import supervisor_system_prompt,supervisor_user_msg,supervisor_grammar
 from brain import create_client, get_response_from_llm
 from brain import json_parser,json_parser_push
 from brain import log
 
 from more_Types import Name_TextEditor,TextEditor_user_manual,TextEditor
+
+from Control_Center import setting,status
 
 """
 while Ture:
@@ -21,86 +26,89 @@ while Ture:
     输出传回LLM
 """
 
-class main_cycle_dual:
-    def __init__(self,user='wqws',language='En',model_name="deepseek-chat",system="win11",temperature=0.75,
-                 executor_log_path=r"logs\log_ai_executor.txt",supervisor_log_path=r"logs\log_ai_supervisor.txt",
-                 LLM_print=True, stdout_print=True, stderr_print=True):
+class work_cycle:
+    def __init__(self,setting:setting,status:status):
 
-        self.test_model = model_name        # 模型名称
-        self.user=user                      # 用户
-        self.system=system                  # 计算机系统
-        self.language=language              # 用户语言
-        self.temperature=temperature        # 生成自由度
+        self.setting = setting
 
-        self.LLM_print=LLM_print            # 是否打印AI输出
-        self.stderr_print=stderr_print      # 是否打印系统输出
-        self.stdout_print=stdout_print      # 是否打印系统错误
-
-        self.powershell = PowerShellSession()                                       # 创建powershell
-
-        self.executor_client, self.test_model = create_client(self.test_model)      # 创建执行者客户端
-        self.executor_log=log(executor_log_path)                                    # 打开执行者日志
-        self.executor_memory = None                                                 # 执行者记忆
-
-        self.supervisor_client, self.test_model = create_client(self.test_model)    # 创建监察者客户端
-        self.supervisor_log=log(supervisor_log_path)                                # 打开监察者日志
-        self.supervisor_memory = None                                               # 监察者记忆
+        self.status = status
 
         self.stdout = ''
         self.stderr = ''
         self.exit = 0
 
+        self.executor_result=''
+        self.supervisor_result=''
+
         # 将所有type对应的操作方法存储在字典
         self.method = {}
-        self.method["powershell"] = self.powershell.execute_command
-        self.method["read_log"] = self.executor_log.read
-        self.method["exit"] = self.exit
+        self.method["powershell"] = self.setting.powershell.execute_command
+        self.method["read_log"] = self.setting.executor_log.read
+        self.method["exit"] = self.Exit
         self.method[Name_TextEditor] = TextEditor.execute
 
         # AI用操作手册
         self.Grammar= executor_grammar + TextEditor_user_manual
 
-        print('系统初始化完成')
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def cycle(self,max_rounds=None,msg='无'):
+    def cycle(self):
 
         # 进入主循环
         round_num = 1
         confirm = ''
         to_executor = ''
+
         while True:
+            # 在每次循环开始时，接收用户是否exit,增加msg,切换AI个数
+            if self.exit != 0:
+                break
 
-            # 获取AI的响应
-            executor_result = self.get_result_executor(msg, round_num, confirm, to_executor)
-
-            # 生成字符串，用于发送给监察者ai
-            confirm,to_executor = self.get_result_supervisor(executor_result, round_num, msg)
+            # 获取执行者的响应
+            self.executor_result = self.get_result_executor(self.status.get_msgs(),
+                                                            round_num,
+                                                            confirm,
+                                                            to_executor)
+            self.status.executor_result=self.executor_result
+            # 在此处向GUI传输执行者的输出
+            # 在每次循环中间时，接收用户是否exit,增加msg,切换AI个数
+            # 如果使用双AI模式
+            if self.status.single_or_dual==2:
+                self.supervisor_result,confirm,to_executor = self.get_result_supervisor(self.status.get_msgs(),
+                                                                                        round_num,
+                                                                                        self.executor_result)
+            else:
+                self.supervisor_result,confirm, to_executor=["","True",single_ai]
+            self.status.supervisor_result=self.supervisor_result
+            # 在此处向GUI传输监察者的输出
 
             if confirm=="False":
                 print("监察者进行了驳回")
                 continue
 
             # 执行命令
-            self.execute(executor_result)
+            self.execute(self.executor_result)
+            self.status.stdout=self.stdout
+            self.status.stderr=self.stderr
+            # 在此处向GUI传输系统输出信息
 
             time.sleep(1)
-            if max_rounds is not None and round_num==max_rounds:
-                break
-            if self.exit==1:
+            if self.exit != 0:
                 break
 
             round_num+=1
             print(round_num,'----------------------------------------------------------------------\n\n')
-        self.close()
+
+        # 结束循环后，将AI记忆，powershell状态，以及别的信息全部返回
+        return self.setting,self.status
 
 # ----------------------------------------------------------------------------------------------------------------------
     # 获取执行者响应
     def get_result_executor(self,msg,round_num, confirm, to_executor):
         system_msg = executor_system_prompt(
-            user=self.user,
-            system=self.system,
-            language=self.language,
+            user=self.setting.user,
+            system=self.setting.system,
+            language=self.setting.language,
             time=str(datetime.now(ZoneInfo("Asia/Shanghai"))),
             num=round_num,
             msg=msg,
@@ -111,19 +119,18 @@ class main_cycle_dual:
             stderr=self.stderr,
             supervisor_msg = confirm + "\n" + to_executor
         )
-
         # 尝试得到ai的响应
         try:
-            executor_result, self.executor_memory = get_response_from_llm(
+            executor_result, self.setting.executor_memory = get_response_from_llm(
                 msg=cmd_output,
-                client=self.executor_client,
-                model=self.test_model,
+                client=self.setting.executor_client,
+                model=self.setting.test_model,
                 system_message=system_msg,
-                msg_history=self.executor_memory,
+                msg_history=self.setting.executor_memory,
                 print_debug=False,  # 开启调试输出
-                temperature=self.temperature
+                temperature=self.setting.temperature
             )
-            if self.LLM_print:
+            if self.setting.LLM_print:
                 print('执行者输出:\n', executor_result)
         except Exception as e:
             print(f"\n运行时错误: {str(e)}")
@@ -136,11 +143,11 @@ class main_cycle_dual:
 
 # ----------------------------------------------------------------------------------------------------------------------
     # 获取监察者响应
-    def get_result_supervisor(self,executor_result,round_num,msg):
+    def get_result_supervisor(self,msg,round_num,executor_result):
         system_msg = supervisor_system_prompt(
-            user = self.user,
-            system = self.system,
-            language = self.language,
+            user = self.setting.user,
+            system = self.setting.system,
+            language = self.setting.language,
             time = str(datetime.now(ZoneInfo("Asia/Shanghai"))),
             num = round_num,
             msg = msg,
@@ -157,16 +164,16 @@ class main_cycle_dual:
         to_executor = ''
         while True:
             try:
-                supervisor_result, self.supervisor_memory = get_response_from_llm(
+                supervisor_result, self.setting.supervisor_memory = get_response_from_llm(
                     msg = cmd_output,
-                    client = self.supervisor_client,
-                    model = self.test_model,
+                    client = self.setting.supervisor_client,
+                    model = self.setting.test_model,
                     system_message = system_msg,
-                    msg_history = self.supervisor_memory,
+                    msg_history = self.setting.supervisor_memory,
                     print_debug = False,  # 开启调试输出
-                    temperature = self.temperature
+                    temperature = self.setting.temperature
                 )
-                if self.LLM_print:
+                if self.setting.LLM_print:
                     print('监察者输出:\n', supervisor_result)
             except Exception as e:
                 print(f"\n运行时错误: {str(e)}")
@@ -182,10 +189,10 @@ class main_cycle_dual:
                 confirm = result_json["confirm"]
                 if "add_log" in result_json:
                     now_time = str(datetime.now(ZoneInfo("Asia/Shanghai")))[:19]
-                    self.supervisor_log.write(time=now_time, msg=result_json["add_log"].strip())
+                    self.setting.supervisor_log.write(time=now_time, msg=result_json["add_log"].strip())
                 if "to_executor" in result_json:
                     to_executor = result_json["to_executor"]
-                return confirm, to_executor
+                return supervisor_result,confirm, to_executor
             else:
                 cmd_output = error_msg
                 print("监察者json解析失败")
@@ -208,7 +215,7 @@ class main_cycle_dual:
 
             if cmd is not None and "type" in cmd:
                 if "add_log" in cmd:
-                    self.executor_log.write(time=now_time, msg=cmd["add_log"].strip())
+                    self.setting.executor_log.write(time=now_time, msg=cmd["add_log"].strip())
 
                 # 根据Type选择相应的方法，并进行操作, 如果没有该Type, 使用报错函数
                 Type = cmd["type"]
@@ -220,25 +227,19 @@ class main_cycle_dual:
             self.stdout += f'第{id + 1}条json的输出:\n{stdout}\n'
             self.stderr += f'第{id + 1}条json的报错:\n{stderr}\n'
 
-        if self.stdout_print:
+        if self.setting.stdout_print:
             print('输出:\n', self.stdout)
-        if self.stderr_print:
+        if self.setting.stderr_print:
             print('错误:\n', self.stderr)
 
 # ----------------------------------------------------------------------------------------------------------------------
-    # 关闭方法
-    def exit(self,msg):
+    # 退出工作状态
+    def Exit(self,msg):
         if msg["confirm"]=="true":
             self.exit=1
             return "停止工作",""
         else:
             return "","未确认关闭"
-
-    # 完全关闭
-    def close(self):
-        self.executor_log.flush_buffer()
-        self.supervisor_log.flush_buffer()
-        self.powershell.close()
 
     # type不存在
     def none(self,msg):
@@ -246,8 +247,10 @@ class main_cycle_dual:
 
 if __name__ =="__main__":
     msg='''
-尝试读取README.md,然后将前二十行抄入到test.txt中。然后关闭系统
+请尝试在命令行中打印一些文字
 '''
+    my_status = status()
+    my_status.user_msg=[msg]
+    my_setting = setting(language="zh")
+    my_setting,my_status = work_cycle(setting=my_setting,status=my_status).cycle()
 
-    xxx=main_cycle_dual(language="zh")
-    xxx.cycle(max_rounds=30,msg=msg)
