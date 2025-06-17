@@ -9,6 +9,8 @@ from Control_Center import setting,status
 from Control_Center import work_cycle
 
 
+
+# 主线程
 class AIDesktopAssistant(QMainWindow):
     def __init__(self, setting, status):
         super().__init__()
@@ -18,7 +20,7 @@ class AIDesktopAssistant(QMainWindow):
         self.init_work_thread()
 
 # ----------------------------------------------------------------------------------------------------------------------
-    # 初始化
+    # 初始化窗口
 
     def initUI(self):
         # 设置主窗口
@@ -70,9 +72,9 @@ class AIDesktopAssistant(QMainWindow):
             }
         """)
 
-        send_button = QPushButton("发送")
-        send_button.setFixedSize(80, 30)
-        send_button.setStyleSheet("""
+        self.send_button = QPushButton("发送")
+        self.send_button.setFixedSize(80, 30)
+        self.send_button.setStyleSheet("""
             QPushButton {
                 background-color: #4CAF50;
                 color: white;
@@ -84,10 +86,10 @@ class AIDesktopAssistant(QMainWindow):
                 background-color: #45a049;
             }
         """)
-        send_button.clicked.connect(self.sendMessage)
+        self.send_button.clicked.connect(self.sendMessage)
 
         input_layout.addWidget(self.user_input)
-        input_layout.addWidget(send_button)
+        input_layout.addWidget(self.send_button)
 
         left_layout.addWidget(self.chat_display)
         left_layout.addLayout(input_layout)
@@ -172,20 +174,7 @@ class AIDesktopAssistant(QMainWindow):
         # 添加初始消息
         self.addMessage("系统", "AI桌面助手已启动，请选择操作模式", "system")
 
-    def init_work_thread(self):
-        """初始化工作线程并连接信号"""
-        self.work_thread = work_cycle(self.setting, self.status)
 
-        # 连接工作线程的信号到主窗口的槽函数
-        self.work_thread.Round_num.connect(self.update_round_num)
-        self.work_thread.executor_output.connect(self.update_executor_output)
-        self.work_thread.supervisor_output.connect(self.update_supervisor_output)
-        self.work_thread.system_stdout.connect(self.update_system_stdout)
-        self.work_thread.system_stderr.connect(self.update_system_stderr)
-        self.work_thread.work_exit.connect(self.work_thread_exited)
-        self.work_thread.Setting.connect(self.update_settings)
-
-# ----------------------------------------------------------------------------------------------------------------------
     def createMenuBar(self):
         menubar = self.menuBar()
 
@@ -248,12 +237,18 @@ class AIDesktopAssistant(QMainWindow):
         # 滚动到底部
         self.chat_display.ensureCursorVisible()
 
-    def sendMessage(self):
-        message = self.user_input.text().strip()
-        if message:
-            self.addMessage("用户", message)
-            self.user_input.clear()
+    def init_work_thread(self):
+        """初始化工作线程并连接信号"""
+        self.work_thread = work_cycle(self.setting, self.status)
 
+        # 连接工作线程的信号到主窗口的槽函数
+        self.work_thread.Round_num.connect(self.update_round_num)
+        self.work_thread.executor_output.connect(self.update_executor_output)
+        self.work_thread.supervisor_output.connect(self.update_supervisor_output)
+        self.work_thread.system_stdout.connect(self.update_system_stdout)
+        self.work_thread.system_stderr.connect(self.update_system_stderr)
+        self.work_thread.work_exit.connect(self.work_thread_exited)
+        self.work_thread.Setting.connect(self.update_settings)
 # ----------------------------------------------------------------------------------------------------------------------
     # 主线程对工作线程的控制
 
@@ -261,6 +256,7 @@ class AIDesktopAssistant(QMainWindow):
         """启动工作模式和工作线程"""
         self.status.exit = 0
         self.addMessage("系统", "进入工作模式", "system")
+        self.send_button.setEnabled(False)
         self.start_work_button.setEnabled(False)
         self.stop_work_button.setEnabled(True)
         self.add_comment_button.setEnabled(True)
@@ -273,6 +269,7 @@ class AIDesktopAssistant(QMainWindow):
         self.status.exit = 1
         self.addMessage("系统", "工作已停止，进入聊天模式", "system")
         self.start_work_button.setEnabled(True)
+        self.send_button.setEnabled(True)
         self.stop_work_button.setEnabled(False)
         self.add_comment_button.setEnabled(False)
         self.status_label.setText(f"状态: 聊天中 | AI数量: {1 if self.status.single_or_dual == 1 else 2}")
@@ -284,7 +281,7 @@ class AIDesktopAssistant(QMainWindow):
         """添加工作留言到工作线程"""
         message = self.user_input.text().strip()
         if message:
-            self.addMessage("用户", f"[工作留言] {message}")
+            self.addMessage("用户", f"{message}")
             self.user_input.clear()
 
             # 将留言发送到工作线程
@@ -335,6 +332,13 @@ class AIDesktopAssistant(QMainWindow):
         self.temp_label.setText(f"生成自由度: {self.setting.temperature}")
         self.lang_label.setText(f"语言: {self.setting.language}")
         self.user_label.setText(f"用户: {self.setting.user}")
+
+# ----------------------------------------------------------------------------------------------------------------------
+    def sendMessage(self):
+        message = self.user_input.text().strip()
+        if message:
+            self.addMessage("用户", message)
+            self.user_input.clear()
 
 # ----------------------------------------------------------------------------------------------------------------------
     # 其他功能

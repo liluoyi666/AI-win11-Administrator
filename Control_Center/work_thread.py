@@ -32,7 +32,7 @@ while Ture:
 
 class work_cycle(QThread):
 
-    work_exit = pyqtSignal(int)                      # 退出标记
+    work_exit = pyqtSignal(int)                 # 退出标记
     Round_num = pyqtSignal(int)                 # 轮次
     executor_output = pyqtSignal(str)           # 执行者输出
     supervisor_output = pyqtSignal(str)         # 监察者输出
@@ -111,6 +111,7 @@ class work_cycle(QThread):
             if self.exit != 0:
                 break
 
+            time.sleep(1)
             round_num+=1
             print(round_num,'----------------------------------------------------------------------\n\n')
 
@@ -264,7 +265,7 @@ class work_cycle(QThread):
         return "","使用了不存在的type，请重试"
 
 # ----------------------------------------------------------------------------------------------------------------------
-    # 槽函数
+    # 控制函数
     @pyqtSlot()
     def Exit(self):                 # 退出
         self.exit=1
@@ -301,9 +302,5 @@ class user_msgs:
         return msgs
 
 
-
 if __name__ =="__main__":
-    msg='''
-请尝试在命令行中打印一些文字
-'''
-
+    print()

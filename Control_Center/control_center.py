@@ -14,6 +14,10 @@ from brain import log
 
 from more_Types import Name_TextEditor,TextEditor_user_manual,TextEditor
 
+"""
+中央状态定义
+"""
+
 # 系统基础设置，保存：AI客户端，AI记忆，命令行状态，日志开启。不参与GUI直接信息交换
 class setting(QObject):
     def __init__(self,user='wqws',language='Zh',model_name="deepseek-chat",system="win11",temperature=0.75,
