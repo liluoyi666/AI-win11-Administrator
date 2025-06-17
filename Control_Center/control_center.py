@@ -4,6 +4,8 @@ from zoneinfo import ZoneInfo
 import json
 import sys
 import time
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QVBoxLayout, QWidget
+from PyQt5.QtCore import QThread, pyqtSignal, Qt, QObject
 
 from brain import PowerShellSession
 from brain import create_client, get_response_from_llm
@@ -13,11 +15,12 @@ from brain import log
 from more_Types import Name_TextEditor,TextEditor_user_manual,TextEditor
 
 # 系统基础设置，保存：AI客户端，AI记忆，命令行状态，日志开启。不参与GUI直接信息交换
-class setting:
-    def __init__(self,user='wqws',language='En',model_name="deepseek-chat",system="win11",temperature=0.75,
+class setting(QObject):
+    def __init__(self,user='wqws',language='Zh',model_name="deepseek-chat",system="win11",temperature=0.75,
                  executor_log_path="C:\\AI-win11-Administrator\\logs\\log_ai_executor.txt",
                  supervisor_log_path="C:\\AI-win11-Administrator\\logs\\log_ai_supervisor.txt",
                  LLM_print=True, stdout_print=True, stderr_print=True):
+        super().__init__()
 
         self.test_model = model_name        # 模型名称
         self.user=user                      # 用户
@@ -48,24 +51,4 @@ class status:
 
         self.single_or_dual = 1     # 工作与聊天公用
 
-        self.executor_result=''     # 工作与聊天公用
-        self.supervisor_result=''   # 工作与聊天公用
-
-        self.stdout = ''            # 工作时系统输出
-        self.stderr = ''            # 工作时系统错误
-
-        self.user_msg = []          # 工作时用户的信息
-        self.user_msg_chat = ''     # 聊天时用户的信息
-
         self.exit = 0               #0为工作，1为聊天
-
-    # 限制工作时用户留言长度，并返回字符串
-    def get_msgs(self):
-
-        if len(self.user_msg)>3:
-            self.user_msg=self.user_msg[-3:]
-
-        y = "(只保存最新的三条信息)"
-        for msg in self.user_msg:
-            y += f"\n{msg}"
-        return y

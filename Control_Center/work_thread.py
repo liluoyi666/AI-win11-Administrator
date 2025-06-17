@@ -1,5 +1,9 @@
 from datetime import datetime
 from sys import stdout
+import sys
+import time
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QVBoxLayout, QWidget
+from PyQt5.QtCore import QThread, pyqtSignal, Qt, pyqtSlot
 from zoneinfo import ZoneInfo
 import json
 import time
@@ -26,12 +30,23 @@ while Ture:
     输出传回LLM
 """
 
-class work_cycle:
+class work_cycle(QThread):
+
+    work_exit = pyqtSignal(int)                      # 退出标记
+    Round_num = pyqtSignal(int)                 # 轮次
+    executor_output = pyqtSignal(str)           # 执行者输出
+    supervisor_output = pyqtSignal(str)         # 监察者输出
+    system_stdout = pyqtSignal(str)             # 系统输出
+    system_stderr = pyqtSignal(str)             # 系统报错
+    Setting = pyqtSignal(setting)               # 基础设置
+
     def __init__(self,setting:setting,status:status):
+        super().__init__()
 
         self.setting = setting
-
         self.status = status
+
+        self.user_msgs = user_msgs()
 
         self.stdout = ''
         self.stderr = ''
@@ -44,7 +59,7 @@ class work_cycle:
         self.method = {}
         self.method["powershell"] = self.setting.powershell.execute_command
         self.method["read_log"] = self.setting.executor_log.read
-        self.method["exit"] = self.Exit
+        self.method["exit"] = self._Exit
         self.method[Name_TextEditor] = TextEditor.execute
 
         # AI用操作手册
@@ -52,7 +67,7 @@ class work_cycle:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-    def cycle(self):
+    def run(self):
 
         # 进入主循环
         round_num = 1
@@ -60,47 +75,48 @@ class work_cycle:
         to_executor = ''
 
         while True:
-            # 在每次循环开始时，接收用户是否exit,增加msg,切换AI个数
-            if self.exit != 0:
-                break
+            self.Round_num.emit(round_num)
 
-            # 获取执行者的响应
-            self.executor_result = self.get_result_executor(self.status.get_msgs(),
+            # 获取执行者的响应并发送信号
+            self.executor_result = self.get_result_executor(self.user_msgs.get_msgs(),
                                                             round_num,
                                                             confirm,
                                                             to_executor)
-            self.status.executor_result=self.executor_result
-            # 在此处向GUI传输执行者的输出
-            # 在每次循环中间时，接收用户是否exit,增加msg,切换AI个数
-            # 如果使用双AI模式
-            if self.status.single_or_dual==2:
-                self.supervisor_result,confirm,to_executor = self.get_result_supervisor(self.status.get_msgs(),
+            self.executor_output.emit(self.executor_result)
+
+            if self.exit != 0:
+                break
+
+            # 获取监察者的响应并发送信号
+            if self.status.single_or_dual == 2:
+                self.supervisor_result,confirm,to_executor = self.get_result_supervisor(self.user_msgs.get_msgs(),
                                                                                         round_num,
                                                                                         self.executor_result)
             else:
                 self.supervisor_result,confirm, to_executor=["","True",single_ai]
-            self.status.supervisor_result=self.supervisor_result
-            # 在此处向GUI传输监察者的输出
+            self.supervisor_output.emit(self.supervisor_result)
 
-            if confirm=="False":
+            if confirm == "False":
                 print("监察者进行了驳回")
                 continue
 
-            # 执行命令
-            self.execute(self.executor_result)
-            self.status.stdout=self.stdout
-            self.status.stderr=self.stderr
-            # 在此处向GUI传输系统输出信息
+            if self.exit != 0:
+                break
 
-            time.sleep(1)
+            # 执行命令
+            self.stdout,self.stderr = self.execute(self.executor_result)
+            self.system_stdout.emit(self.stdout)
+            self.system_stderr.emit(self.stderr)
+
             if self.exit != 0:
                 break
 
             round_num+=1
             print(round_num,'----------------------------------------------------------------------\n\n')
 
-        # 结束循环后，将AI记忆，powershell状态，以及别的信息全部返回
-        return self.setting,self.status
+        self.work_exit.emit(1)
+        self.Setting.emit(self.setting)
+
 
 # ----------------------------------------------------------------------------------------------------------------------
     # 获取执行者响应
@@ -207,11 +223,11 @@ class work_cycle:
         result_json = json_parser_push(executor_result)
 
         # 执行列表中的所有指令
-        self.stdout = ''
-        self.stderr = ''
+        stdout = ''
+        stderr = ''
         for id, cmd in enumerate(result_json):
-            stdout = 'Empty'
-            stderr = 'Empty'
+            out = ''
+            err = ''
 
             if cmd is not None and "type" in cmd:
                 if "add_log" in cmd:
@@ -219,22 +235,24 @@ class work_cycle:
 
                 # 根据Type选择相应的方法，并进行操作, 如果没有该Type, 使用报错函数
                 Type = cmd["type"]
-                stdout, stderr = self.method.get(Type, self.none)(cmd)
+                out, err = self.method.get(Type, self.none)(cmd)
 
             else:
                 stderr = error_msg
 
-            self.stdout += f'第{id + 1}条json的输出:\n{stdout}\n'
-            self.stderr += f'第{id + 1}条json的报错:\n{stderr}\n'
+            stdout += f'第{id + 1}条json的输出:\n{out}\n'
+            stderr += f'第{id + 1}条json的报错:\n{err}\n'
 
         if self.setting.stdout_print:
-            print('输出:\n', self.stdout)
+            print('输出:\n', stdout)
         if self.setting.stderr_print:
-            print('错误:\n', self.stderr)
+            print('错误:\n', stderr)
+
+        return stdout,stderr
 
 # ----------------------------------------------------------------------------------------------------------------------
     # 退出工作状态
-    def Exit(self,msg):
+    def _Exit(self,msg):
         if msg["confirm"]=="true":
             self.exit=1
             return "停止工作",""
@@ -245,12 +263,47 @@ class work_cycle:
     def none(self,msg):
         return "","使用了不存在的type，请重试"
 
+# ----------------------------------------------------------------------------------------------------------------------
+    # 槽函数
+    @pyqtSlot()
+    def Exit(self):                 # 退出
+        self.exit=1
+
+    @pyqtSlot()                     # 增加留言
+    def add_msg(self,msg):
+        self.user_msgs.append(msg)
+
+    @pyqtSlot()
+    def num_AI(self):               # 切换AI个数
+        if self.status.single_or_dual==1:
+            self.status.single_or_dual = 2
+        else:
+            self.status.single_or_dual = 1
+
+
+
+class user_msgs:
+    def __init__(self,max_len=3):
+        self.msgs=[]
+        self.max_len=max_len
+
+    def append(self,msg):
+        self.msgs.append(msg)
+        if len(self.msgs)>3:
+            self.msgs = self.msgs[-self.max_len:]
+
+    def get_msgs(self):
+        msgs=f"只显示最新的{self.max_len}条用户留言：\n"
+
+        for a in self.msgs:
+            msgs+=f"{a}\n"
+
+        return msgs
+
+
+
 if __name__ =="__main__":
     msg='''
 请尝试在命令行中打印一些文字
 '''
-    my_status = status()
-    my_status.user_msg=[msg]
-    my_setting = setting(language="zh")
-    my_setting,my_status = work_cycle(setting=my_setting,status=my_status).cycle()
 
