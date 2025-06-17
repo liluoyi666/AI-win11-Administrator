@@ -30,6 +30,9 @@ while Ture:
     输出传回LLM
 """
 
+def get_time():
+    return str(datetime.now(ZoneInfo("Asia/Shanghai")))[:19]
+
 class work_cycle(QThread):
 
     work_exit = pyqtSignal(int)                 # 退出标记
@@ -40,27 +43,19 @@ class work_cycle(QThread):
     system_stderr = pyqtSignal(str)             # 系统报错
     Setting = pyqtSignal(setting)               # 基础设置
 
-    def __init__(self,setting:setting,status:status):
+    def __init__(self):
         super().__init__()
 
-        self.setting = setting
-        self.status = status
+        self.setting = None
+        self.status = None
 
         self.user_msgs = user_msgs()
 
         self.stdout = ''
         self.stderr = ''
-        self.exit = 0
 
         self.executor_result=''
         self.supervisor_result=''
-
-        # 将所有type对应的操作方法存储在字典
-        self.method = {}
-        self.method["powershell"] = self.setting.powershell.execute_command
-        self.method["read_log"] = self.setting.executor_log.read
-        self.method["exit"] = self._Exit
-        self.method[Name_TextEditor] = TextEditor.execute
 
         # AI用操作手册
         self.Grammar= executor_grammar + TextEditor_user_manual
@@ -68,6 +63,12 @@ class work_cycle(QThread):
 
 # ----------------------------------------------------------------------------------------------------------------------
     def run(self):
+        # 将所有type对应的操作方法存储在字典
+        self.method = {}
+        self.method["powershell"] = self.setting.powershell.execute_command
+        self.method["read_log"] = self.setting.executor_log.read
+        self.method["exit"] = self._Exit
+        self.method[Name_TextEditor] = TextEditor.execute
 
         # 进入主循环
         round_num = 1
@@ -84,8 +85,6 @@ class work_cycle(QThread):
                                                             to_executor)
             self.executor_output.emit(self.executor_result)
 
-            if self.exit != 0:
-                break
 
             # 获取监察者的响应并发送信号
             if self.status.single_or_dual == 2:
@@ -100,23 +99,21 @@ class work_cycle(QThread):
                 print("监察者进行了驳回")
                 continue
 
-            if self.exit != 0:
-                break
 
             # 执行命令
             self.stdout,self.stderr = self.execute(self.executor_result)
             self.system_stdout.emit(self.stdout)
             self.system_stderr.emit(self.stderr)
 
-            if self.exit != 0:
+            if self.status.exit != 0:
                 break
 
             time.sleep(1)
             round_num+=1
             print(round_num,'----------------------------------------------------------------------\n\n')
 
-        self.work_exit.emit(1)
         self.Setting.emit(self.setting)
+        self.work_exit.emit(1)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -255,7 +252,7 @@ class work_cycle(QThread):
     # 退出工作状态
     def _Exit(self,msg):
         if msg["confirm"]=="true":
-            self.exit=1
+            self.status.exit=1
             return "停止工作",""
         else:
             return "","未确认关闭"
@@ -268,7 +265,7 @@ class work_cycle(QThread):
     # 控制函数
     @pyqtSlot()
     def Exit(self):                 # 退出
-        self.exit=1
+        self.status.exit = 1
 
     @pyqtSlot()                     # 增加留言
     def add_msg(self,msg):
@@ -281,7 +278,10 @@ class work_cycle(QThread):
         else:
             self.status.single_or_dual = 1
 
-
+    @pyqtSlot()
+    def send_status(self,setting:setting,status:status):
+        self.setting = setting
+        self.status = status
 
 class user_msgs:
     def __init__(self,max_len=3):
@@ -295,7 +295,6 @@ class user_msgs:
 
     def get_msgs(self):
         msgs=f"只显示最新的{self.max_len}条用户留言：\n"
-
         for a in self.msgs:
             msgs+=f"{a}\n"
 
