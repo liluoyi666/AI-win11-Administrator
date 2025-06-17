@@ -45,6 +45,8 @@ AI-win11-Administrator:
         LLM_api.py              # API
         log_editor.py           # Log service
         powershell.py           # Command line
+    
+    C
 
 ```
 ## Core Features
@@ -203,9 +205,7 @@ Click [AI-win11-Administrator (English)](#ai-win11-administrator-english) to swi
 ```
 AI-win11-Administrator:
     main.py             # 启动
-    work_cycle.py       # AI工作循环
 
-    dustbin/            # 垃圾箱
     more_Types/         # 更多操作类型
 
     logs/:              # 日志
@@ -220,6 +220,12 @@ AI-win11-Administrator:
         LLM_api.py              # api
         log_editor.py           # 日志服务
         powershell.py           # 命令行
+    
+    Control_Center/:    # 中央控制系统
+        GUI.py                  # GUI
+        status.py               # 系统状态类
+        thread_chat.py          # 聊天线程
+        thread_work.py          # 工作线程
 
 ```
 

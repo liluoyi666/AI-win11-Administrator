@@ -1,7 +1,9 @@
 
-from .control_center import setting,status
-from .work_thread import work_cycle
-from .chat_thread import chat_cycle
+from .status import setting,status
+from .thread_work import work_cycle
+from .thread_chat import chat_cycle
+from .GUI import AIDesktopAssistant
 
 __all__ = (setting,status,
-           work_cycle,chat_cycle)
+           work_cycle,chat_cycle,
+           AIDesktopAssistant)
