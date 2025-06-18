@@ -1,14 +1,11 @@
 import sys
 from PyQt5.QtWidgets import QApplication
-from Control_Center import setting,status
-from Control_Center import AIDesktopAssistant
-
+from Control_Center import setting,status,AIDesktopAssistant,AIDesktopAssistant1
 def run(user,language,model_name,system):
     app_setting = setting(user=user,language=language,model_name=model_name,system=system)
     app_status = status()
-
     app = QApplication(sys.argv)
-    ex = AIDesktopAssistant(app_setting, app_status)
+    ex = AIDesktopAssistant1(app_setting, app_status)
     ex.show()
     sys.exit(app.exec_())
 

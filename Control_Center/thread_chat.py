@@ -23,6 +23,7 @@ class chat_cycle(QThread):
     executor_output = pyqtSignal(str)           # 执行者输出
     supervisor_output = pyqtSignal(str)         # 监察者输出
     Setting = pyqtSignal(setting)               # 基础设置
+    system_stderr = pyqtSignal(str)             # 系统报错
 
     def __init__(self):
         super().__init__()
@@ -56,21 +57,28 @@ class chat_cycle(QThread):
                     break
                 if self.status.exit != 1:
                     break
-
             if self.status.exit != 1:
                 break
 
             # 获取执行者的响应并发送信号
             self.executor_result = self.get_result_executor(self.to_executor,round_num)
-            self.executor_output.emit(self.executor_result)
-            self.to_supervisor += f"执行者({get_time()}):\n{self.executor_result}"
-            self.to_executor = ''
+            if self.executor_result !="<None>":
+                self.executor_output.emit(self.executor_result)
+                self.to_supervisor += f"执行者({get_time()}):\n{self.executor_result}"
+                self.to_executor = ''
+            else:
+                self.system_stderr.emit("获取API响应失败，请检查网络状态")
+                continue
 
             # 获取监察者的响应并发送信号
             if self.status.single_or_dual == 2:
                 self.supervisor_result= self.get_result_supervisor(self.to_supervisor,round_num)
-                self.to_executor += f"监察者({get_time()}):\n{self.supervisor_result}"
-                self.to_supervisor = ''
+                if self.executor_result != "<None>":
+                    self.to_executor += f"监察者({get_time()}):\n{self.supervisor_result}"
+                    self.to_supervisor = ''
+                else:
+                    self.system_stderr.emit("获取API响应失败，请检查网络状态")
+                    continue
             else:
                 self.supervisor_result= ""
             self.supervisor_output.emit(self.supervisor_result)
@@ -78,6 +86,7 @@ class chat_cycle(QThread):
             if self.status.exit != 1:
                 break
 
+            self.Setting.emit(self.setting)
             round_num += 1
             print(round_num, '----------------------------------------------------------------------\n\n')
 
@@ -100,6 +109,7 @@ class chat_cycle(QThread):
             num = round_num
         )
         # 尝试得到ai的响应
+        executor_result = "<None>"
         try:
             executor_result, self.setting.executor_memory = get_response_from_llm(
                 msg = msg,
@@ -131,7 +141,7 @@ class chat_cycle(QThread):
             time=str(datetime.now(ZoneInfo("Asia/Shanghai"))),
             num=round_num
         )
-
+        supervisor_result = "<None>"
         try:
             supervisor_result, self.setting.supervisor_memory = get_response_from_llm(
                 msg = msg,

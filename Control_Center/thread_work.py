@@ -79,12 +79,12 @@ class work_cycle(QThread):
             self.Round_num.emit(round_num)
 
             # 获取执行者的响应并发送信号
-            self.executor_result = self.get_result_executor(self.user_msgs.get_msgs(),
-                                                            round_num,
-                                                            confirm,
-                                                            to_executor)
-            self.executor_output.emit(self.executor_result)
-
+            self.executor_result = self.get_result_executor(self.user_msgs.get_msgs(),round_num,confirm,to_executor)
+            if self.executor_output !="<None>":
+                self.executor_output.emit(self.executor_result)
+            else:
+                self.system_stderr.emit("获取API响应失败，请检查网络状态")
+                break
 
             # 获取监察者的响应并发送信号
             if self.status.single_or_dual == 2:
@@ -93,7 +93,11 @@ class work_cycle(QThread):
                                                                                         self.executor_result)
             else:
                 self.supervisor_result,confirm, to_executor=["","True",single_ai]
-            self.supervisor_output.emit(self.supervisor_result)
+            if self.supervisor_output != "<None>":
+                self.supervisor_output.emit(self.supervisor_result)
+            else:
+                self.system_stderr.emit("获取API响应失败，请检查网络状态")
+                break
 
             if confirm == "False":
                 print("监察者进行了驳回")
@@ -108,7 +112,7 @@ class work_cycle(QThread):
             if self.status.exit != 0:
                 break
 
-            time.sleep(1)
+            self.Setting.emit(self.setting)
             round_num+=1
             print(round_num,'----------------------------------------------------------------------\n\n')
 
@@ -134,6 +138,7 @@ class work_cycle(QThread):
             supervisor_msg = confirm + "\n" + to_executor
         )
         # 尝试得到ai的响应
+        executor_result = "<None>"
         try:
             executor_result, self.setting.executor_memory = get_response_from_llm(
                 msg=cmd_output,
@@ -173,7 +178,7 @@ class work_cycle(QThread):
             stderr = self.stderr,
             executor_msg = executor_result
         )
-
+        supervisor_result = "<None>"
         confirm = "True"
         to_executor = ''
         while True:
@@ -196,6 +201,8 @@ class work_cycle(QThread):
                 elif "RateLimitError" in str(e):
                     print("API调用限额已用尽，请稍后重试")
 
+            if supervisor_result=="<None>":
+                return "<None>",True,"网络错误，监察者无响应"
             result_json = json_parser(supervisor_result)
 
             # 判断不为None,且存在"confirm",且"confirm"是"True"或"False"

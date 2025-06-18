@@ -14,7 +14,7 @@ def get_time():
     return str(datetime.now(ZoneInfo("Asia/Shanghai")))[:19]
 
 # 主线程
-class AIDesktopAssistant(QMainWindow):
+class AIDesktopAssistant1(QMainWindow):
     def __init__(self, setting, status):
         super().__init__()
         self.setting = setting
@@ -32,139 +32,186 @@ class AIDesktopAssistant(QMainWindow):
         self.setGeometry(300, 300, 1000, 700)
         self.setWindowIcon(QIcon('ai_icon.png'))
 
+        # 应用全局样式
+        self.applyLightTheme()
+
         # 创建菜单栏
         self.createMenuBar()
 
         # 创建主控件
         main_widget = QWidget()
         main_layout = QVBoxLayout()
+        main_layout.setContentsMargins(10, 10, 10, 10)  # 增加内边距
 
         # 创建状态栏
         status_bar = self.statusBar()
         self.status_label = QLabel(
             f"状态: {'工作中' if self.status.exit == 0 else '聊天中'} | AI数量: {1 if self.status.single_or_dual == 1 else 2}")
         status_bar.addWidget(self.status_label)
+        status_bar.setStyleSheet("background-color: #f5f5f5; color: #555; border-top: 1px solid #e0e0e0;")
 
         # 创建左右分割视图
         splitter = QSplitter(Qt.Horizontal)
+        splitter.setHandleWidth(5)  # 增加分割线宽度
+        splitter.setStyleSheet("QSplitter::handle { background-color: #e0e0e0; }")
 
         # 左侧面板 - 聊天/工作区
         left_panel = QWidget()
-        left_layout = QVBoxLayout()
+        left_layout = QVBoxLayout(left_panel)
+        left_layout.setContentsMargins(0, 0, 0, 0)  # 移除内边距
 
         # 聊天/工作显示区
         self.chat_display = QTextEdit()
         self.chat_display.setReadOnly(True)
-        self.chat_display.setFont(QFont("Consolas", 10))
+        self.chat_display.setFont(QFont("Segoe UI", 10))  # 使用更现代的字体
         self.chat_display.setStyleSheet("""
             QTextEdit {
-                background-color: #f0f0f0;
-                border: 1px solid #cccccc;
-                border-radius: 5px;
+                background-color: white;
+                border: 1px solid #e0e0e0;
+                border-radius: 8px;
+                padding: 10px;
             }
         """)
 
         # 用户输入区
-        input_layout = QHBoxLayout()
+        input_widget = QWidget()
+        input_layout = QHBoxLayout(input_widget)
+        input_layout.setContentsMargins(0, 0, 0, 0)
+
         self.user_input = QLineEdit()
         self.user_input.setPlaceholderText("输入消息...")
         self.user_input.setStyleSheet("""
             QLineEdit {
-                padding: 5px;
-                border: 1px solid #cccccc;
-                border-radius: 3px;
+                padding: 10px;
+                border: 1px solid #e0e0e0;
+                border-radius: 8px;
+                background-color: white;
+                font-size: 14px;
+            }
+            QLineEdit:focus {
+                border: 1px solid #4da6ff;
             }
         """)
 
         self.send_button = QPushButton("发送")
-        self.send_button.setFixedSize(80, 30)
+        self.send_button.setFixedSize(100, 40)  # 增大按钮尺寸
         self.send_button.setStyleSheet("""
             QPushButton {
-                background-color: #4CAF50;
+                background-color: #4da6ff;
                 color: white;
                 border: none;
-                border-radius: 3px;
+                border-radius: 8px;
                 padding: 5px;
+                font-weight: bold;
+                font-size: 14px;
             }
             QPushButton:hover {
-                background-color: #45a049;
+                background-color: #3d8bdf;
+            }
+            QPushButton:pressed {
+                background-color: #2c7ad9;
             }
         """)
         self.send_button.clicked.connect(self.sendMessage)
 
-        input_layout.addWidget(self.user_input)
-        input_layout.addWidget(self.send_button)
+        input_layout.addWidget(self.user_input, 9)  # 输入框占9份空间
+        input_layout.addWidget(self.send_button, 1)  # 按钮占1份空间
 
-        left_layout.addWidget(self.chat_display)
-        left_layout.addLayout(input_layout)
-        left_panel.setLayout(left_layout)
+        left_layout.addWidget(self.chat_display, 8)  # 聊天区占8份空间
+        left_layout.addWidget(input_widget, 2)  # 输入区占2份空间
 
         # 右侧面板 - 控制区
         right_panel = QWidget()
-        right_layout = QVBoxLayout()
+        right_layout = QVBoxLayout(right_panel)
         right_layout.setAlignment(Qt.AlignTop)
+        right_layout.setContentsMargins(0, 0, 0, 0)  # 移除内边距
+        right_layout.setSpacing(15)  # 增加控件间距
 
         # 工作控制组
         work_group = QGroupBox("工作控制")
-        work_layout = QVBoxLayout()
+        work_group.setStyleSheet("QGroupBox { font-weight: bold; color: #4da6ff; }")
+        work_layout = QVBoxLayout(work_group)
+        work_layout.setSpacing(10)  # 增加按钮间距
 
         self.start_work_button = QPushButton("开始工作")
-        self.start_work_button.setStyleSheet("background-color: #6495ED; color: white;")
+        self.start_work_button.setStyleSheet(self.getButtonStyle("#4da6ff"))
         self.start_work_button.clicked.connect(self.startWork)
+        self.start_work_button.setMinimumHeight(40)  # 增加按钮高度
 
         self.stop_work_button = QPushButton("开始聊天")
-        self.stop_work_button.setStyleSheet("background-color: #6495ED; color: white;")
+        self.stop_work_button.setStyleSheet(self.getButtonStyle("#4da6ff"))
         self.stop_work_button.clicked.connect(self.startChat)
         self.stop_work_button.setEnabled(False)
+        self.stop_work_button.setMinimumHeight(40)
 
         self.add_comment_button = QPushButton("添加工作留言")
-        self.add_comment_button.setStyleSheet("background-color: #6495ED; color: white;")
+        self.add_comment_button.setStyleSheet(self.getButtonStyle("#4da6ff"))
         self.add_comment_button.clicked.connect(self.addWorkComment)
         self.add_comment_button.setEnabled(True)
+        self.add_comment_button.setMinimumHeight(40)
 
         work_layout.addWidget(self.start_work_button)
         work_layout.addWidget(self.stop_work_button)
         work_layout.addWidget(self.add_comment_button)
-        work_group.setLayout(work_layout)
 
         # AI控制组
         ai_group = QGroupBox("AI控制")
-        ai_layout = QVBoxLayout()
+        ai_group.setStyleSheet("QGroupBox { font-weight: bold; color: #4da6ff; }")
+        ai_layout = QVBoxLayout(ai_group)
+        ai_layout.setSpacing(10)
 
         ai_count_label = QLabel("AI数量:")
+        ai_count_label.setStyleSheet("font-weight: normal;")
 
         self.ai_count_combo = QComboBox()
         self.ai_count_combo.addItem("1个AI")
         self.ai_count_combo.addItem("2个AI")
         self.ai_count_combo.setCurrentIndex(0 if self.status.single_or_dual == 1 else 1)
         self.ai_count_combo.currentIndexChanged.connect(self.changeAICount)
+        self.ai_count_combo.setStyleSheet("""
+            QComboBox {
+                padding: 8px;
+                border: 1px solid #e0e0e0;
+                border-radius: 8px;
+                background-color: white;
+                font-size: 14px;
+            }
+            QComboBox::drop-down {
+                border: none;
+            }
+        """)
 
         self.ai_status_label = QLabel(f"当前: {1 if self.status.single_or_dual == 1 else 2}个AI")
+        self.ai_status_label.setStyleSheet("font-weight: normal;")
 
         ai_layout.addWidget(ai_count_label)
         ai_layout.addWidget(self.ai_count_combo)
         ai_layout.addWidget(self.ai_status_label)
-        ai_group.setLayout(ai_layout)
 
         # 系统信息组
         sys_group = QGroupBox("系统信息")
-        sys_layout = QVBoxLayout()
+        sys_group.setStyleSheet("QGroupBox { font-weight: bold; color: #4da6ff; }")
+        sys_layout = QVBoxLayout(sys_group)
+        sys_layout.setSpacing(8)
 
         self.model_label = QLabel(f"模型: {self.setting.test_model}")
         self.temp_label = QLabel(f"生成自由度: {self.setting.temperature}")
         self.lang_label = QLabel(f"语言: {self.setting.language}")
         self.user_label = QLabel(f"用户: {self.setting.user}")
 
+        # 设置信息标签样式
+        for label in [self.model_label, self.temp_label, self.lang_label, self.user_label]:
+            label.setStyleSheet(
+                "font-weight: normal; padding: 5px; border-radius: 5px; background-color: rgba(77, 166, 255, 0.1);")
+
         sys_layout.addWidget(self.model_label)
         sys_layout.addWidget(self.temp_label)
         sys_layout.addWidget(self.lang_label)
         sys_layout.addWidget(self.user_label)
-        sys_group.setLayout(sys_layout)
 
         right_layout.addWidget(work_group)
         right_layout.addWidget(ai_group)
         right_layout.addWidget(sys_group)
-        right_panel.setLayout(right_layout)
 
         # 添加左右面板到分割器
         splitter.addWidget(left_panel)
@@ -177,6 +224,77 @@ class AIDesktopAssistant(QMainWindow):
 
         # 添加初始消息
         self.addMessage("系统", "AI桌面助手已启动", "system")
+
+    def applyLightTheme(self):
+        # 应用全局浅色主题
+        self.setStyleSheet("""
+            QMainWindow {
+                background-color: #f9f9f9;
+            }
+            QWidget {
+                background-color: #f9f9f9;
+                font-family: 'Segoe UI', Arial, sans-serif;
+            }
+            QGroupBox {
+                border: 1px solid #e0e0e0;
+                border-radius: 8px;
+                margin-top: 1.5ex;
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+            QGroupBox::title {
+                subcontrol-origin: margin;
+                subcontrol-position: top center;
+                padding: 0 5px;
+            }
+            QLabel {
+                color: #333;
+            }
+        """)
+
+    def getButtonStyle(self, color):
+        # 统一的按钮样式
+        return f"""
+            QPushButton {{
+                background-color: {color};
+                color: white;
+                border: none;
+                border-radius: 8px;
+                padding: 8px;
+                font-weight: bold;
+                font-size: 14px;
+            }}
+            QPushButton:hover {{
+                background-color: {self.lightenColor(color, 20)};
+            }}
+            QPushButton:pressed {{
+                background-color: {self.darkenColor(color, 20)};
+            }}
+            QPushButton:disabled {{
+                background-color: #cccccc;
+                color: #888888;
+            }}
+        """
+
+    def lightenColor(self, hex_color, percent):
+        # 颜色变亮
+        r = int(hex_color[1:3], 16)
+        g = int(hex_color[3:5], 16)
+        b = int(hex_color[5:7], 16)
+        r = min(255, r + int(percent * 2.55))
+        g = min(255, g + int(percent * 2.55))
+        b = min(255, b + int(percent * 2.55))
+        return f"#{r:02x}{g:02x}{b:02x}"
+
+    def darkenColor(self, hex_color, percent):
+        # 颜色变暗
+        r = int(hex_color[1:3], 16)
+        g = int(hex_color[3:5], 16)
+        b = int(hex_color[5:7], 16)
+        r = max(0, r - int(percent * 2.55))
+        g = max(0, g - int(percent * 2.55))
+        b = max(0, b - int(percent * 2.55))
+        return f"#{r:02x}{g:02x}{b:02x}"
 
 
     def createMenuBar(self):
@@ -226,20 +344,30 @@ class AIDesktopAssistant(QMainWindow):
             color = "#FF4500"  # 红色
             prefix = "[错误] "
         else:
-            color = "#000000"  # 黑色
+            color = "#4da6ff"  # 主题蓝色
             prefix = "[用户] "
 
-        # 添加消息到聊天框
+        # 添加时间戳
+        timestamp = get_time()
+        self.chat_display.setTextColor(QColor("#999999"))
+        self.chat_display.setFontWeight(QFont.Normal)
+        self.chat_display.setFontPointSize(9)
+        self.chat_display.insertPlainText(f"{timestamp} ")
+
+        # 添加消息前缀
         self.chat_display.setTextColor(QColor(color))
         self.chat_display.setFontWeight(QFont.Bold)
+        self.chat_display.setFontPointSize(10)
         self.chat_display.insertPlainText(prefix)
 
+        # 添加消息内容
         self.chat_display.setFontWeight(QFont.Normal)
         self.chat_display.setTextColor(QColor("#333333"))
         self.chat_display.insertPlainText(message + "\n\n")
 
         # 滚动到底部
         self.chat_display.ensureCursorVisible()
+
 
     def init_work_thread(self):
         """初始化工作线程并连接信号"""
@@ -388,7 +516,7 @@ class AIDesktopAssistant(QMainWindow):
             QApplication.setPalette(QApplication.style().standardPalette())
 
     def showAbout(self):
-        self.addMessage("系统", "AI桌面助手 v1.0\n基于Python和PyQt5开发\n提供AI辅助工作和聊天功能", "system")
+        self.addMessage("系统", "AI桌面助手 v1.0\n基于Python和PyQt5开发\n提供AI辅助工作和聊天功能,聊天状态下可与发送信息与AI交流，在聊天或工作中可以增加工作留言，在工作状态下AI可以读取该留言", "system")
 
 if __name__ == '__main__':
     # 示例设置和状态
@@ -396,6 +524,6 @@ if __name__ == '__main__':
     app_status = status()
 
     app = QApplication(sys.argv)
-    ex = AIDesktopAssistant(app_setting, app_status)
+    ex = AIDesktopAssistant1(app_setting, app_status)
     ex.show()
     sys.exit(app.exec_())
