@@ -10,6 +10,7 @@ This project aims to enable large language models (LLMs) to operate Windows 11 s
 The dual-AI architecture utilizes two AIs for mutual supervision and collaborative work. One AI generates instructions while the other confirms whether they should be executed and provides feedback. This architecture better handles complex tasks and situations while significantly enhancing security. Additionally, the dual-AI architecture greatly improves the user experience during interactions.
 ***AI security and entertainment value will be significantly enhanced***
 
+
 ## Directory
 
 - [Project Overview](#project-overview)
@@ -24,6 +25,7 @@ The dual-AI architecture utilizes two AIs for mutual supervision and collaborati
 - [Contribution](#contribution)
 - [License](#license)
 - [Developer's Message](#developers-message)
+
 
 ## Project Structure
 ```
@@ -62,6 +64,7 @@ AI-win11-Administrator:
 - **Secure Virtual Machine Environment**: Deployed in a VM to enhance system security and prevent accidental damage to the host system.
 - **Multi-Data Type Interfaces**: Supports interfaces for various data types, providing richer data processing capabilities for LLMs.
 - **Switchable Single/Dual AI Modes**: Choose between modes based on security needs and resource constraints to accommodate different user requirements.
+</br>
 
 ## AI Command Format and Execution Principle
 ### Workflow
@@ -87,6 +90,7 @@ The "type" key is always required. Other keys depend on the operation type. The 
 The core execution cycle in main_cycle.py receives LLM responses and parses the JSON. Based on the "type" key, it calls corresponding methods. For example:
 - If type is "powershell", execute PowerShell commands via PowerShellSession class
 - If type is "read_log", read logs via log class read method
+</br>
 
 ## Single-AI vs Dual-AI Architecture
 ### Single-AI Architecture
@@ -99,6 +103,7 @@ Features two specialized AIs:
 2. **Supervisor AI**: Decides whether commands should be executed and provides solutions/feedback
 
 Logs are maintained separately. Executor outputs are fully visible to Supervisor, while only partial Supervisor outputs are shared with Executor. Future development will balance permissions between them. The dual-AI architecture enhances system stability and security while improving user interaction experience.
+</br>
 
 ## GUI Software Design and Features
 ### Chat vs Work States
@@ -122,6 +127,7 @@ Messages are automatically timestamped to ensure AI understands information time
   - AI configuration
   - Message queuing
   - System status information
+</br>
 
 ## Project Vision
 ### Original Plan
@@ -135,6 +141,7 @@ Messages are automatically timestamped to ensure AI understands information time
 - **Early Stage**: Achieve seamless chat/work mode switching
 - **Mid Stage**: Develop visual interface, expand data interfaces, design AI avatars
 - **Final Stage**: Create integrated solution combining automation, conversational AI, and system security
+</br>
 
 ## Current Status
 - **Single-AI architecture operational**
@@ -143,6 +150,7 @@ Messages are automatically timestamped to ensure AI understands information time
 - **Dual-AI architecture functional**
 - **Multi-command batch execution implemented**
 - **GUI with chat functionality completed**
+</br>
 
 ## Local Deployment Guide
 ### Environment Setup
@@ -180,6 +188,7 @@ xxx = main_cycle_single(log_path=r"logs/log_ai_executor.txt")
 xxx.cycle(max_rounds=30, msg=msg)
 ```
 
+
 ## Contribution
 ### Code Understanding Sequence:
 1. `brain/LLM_api.py`
@@ -193,9 +202,11 @@ xxx.cycle(max_rounds=30, msg=msg)
 3. Commit changes: `git commit -m 'Add feature'`
 4. Push branch: `git push origin feature/your-feature`
 5. Submit Pull Request
+</br>
 
 ## License
 This project is licensed under [LICENSE NAME]. See `LICENSE` for details.
+</br>
 
 ## Developer's Message:
 The developer acknowledges that VM deployment solves over 80% of security concerns. However, requiring all users to install VM software presents significant adoption barriers. More importantly, if AI cannot directly operate the user's computer, the software's utility diminishes substantially. We must therefore consider security without relying on VM deployment - otherwise this project loses much of its purpose.
@@ -203,6 +214,7 @@ The developer acknowledges that VM deployment solves over 80% of security concer
 
 Banning "rm" commands is like the proverbial ostrich hiding its head. AI could package destructive commands in scripts, and sometimes "rm" is legitimately used for cleanup. Hard-coded restrictions can't prevent misuse - only something with equivalent intelligence can effectively supervise AI. Hence we developed the dual-AI "Executor-Supervisor" architecture. This should prove interesting, though we can't yet guarantee its effectiveness.
 </br>
+
 AI role-playing is fascinating - and no, I'm not just playing around. We might increase the Executor's creative freedom while restricting the Supervisor's, creating distinct AI personalities. This would enhance both security and user experience. Imagine chatting with AIs exhibiting different personalities - that's valuable beyond just technical considerations.
 
 ### ---------------------------------------------------------------------------------------------------------------
@@ -271,6 +283,7 @@ AI-win11-Administrator:
 - **安全的虚拟机环境**：将程序部署在虚拟机中，增加了系统的安全性，避免因错误操作对主机系统造成影响。
 - **多数据类型接口**：支持多种数据类型的接口，为LLM提供更丰富的数据处理能力。
 - **单AI模式与双AI模式自由切换**：根据安全需求与经济条件选择模式，以适应不同用户需求。
+</br>
 
 ## AI命令格式与命令执行的原理
 ### 运行流程
@@ -293,6 +306,7 @@ AI的输出需包含以下格式的json，系统会检测AI的输出，并将提
 任何情况下都必须存在type键，其他键具体由type决定。add_log不存在不影响操作执行，add_log存在也不会影响任何类型的操作。记入日志时会自动添加时间以及换行，无需手动添加。日志文件由系统自动维护。
 ### 命令执行原理
 系统通过main_cycle.py的核心执行循环，接收 LLM 的响应并解析其中的 JSON。根据 JSON 中的type键，调用相应的操作方法。例如，如果type为powershell，则调用PowerShellSession类的execute_command方法执行相应的 PowerShell 命令；如果type为read_log，则调用log类的read方法读取日志。
+</br>
 
 ## 单AI架构与双AI架构
 ### 单AI架构
@@ -305,6 +319,7 @@ AI的输出需包含以下格式的json，系统会检测AI的输出，并将提
 双方的日志分别独立，执行者的所有输出对监察者完全公开，监察者的输出只有部分向执行者分开。
 后续为了平衡执行者和监察者的操作权限，还会进行进一步的平衡性调整，进一步修改其可执行命令。
 双AI架构有利于提示系统稳定性与安全性，在后续开发与用户的交流对话模式下，双AI也可以提升用户在交流中趣味性。
+</br>
 
 ## GUI软件设计与功能介绍
 ### 聊天与工作状态
@@ -319,6 +334,7 @@ AI的输出需包含以下格式的json，系统会检测AI的输出，并将提
 ### GUI布局设计
 左侧为日志信息流显示区，在工作时显示AI生成的指令以及AI操作后返回的信息，在聊天时显示AI的聊天信息，当然也包括用户发送的信息以及本系统的提示信息，且这些信息都附带了时间信息。
 右侧为控制面板，可切换当前状态，切换AI个数，追加工作留言。并显示工作状态信息。
+</br>
 
 ## 项目愿景
 ### 原始计划
@@ -333,6 +349,7 @@ AI的输出需包含以下格式的json，系统会检测AI的输出，并将提
 - **初期阶段**：实现工作状态与对话状态的自由切换，既可与用户对话，也可以操作计算机。
 - **中期阶段**：开发可视化窗口以及软件，增加更多数据类型接口，设计AI虚拟形象。
 - **最终阶段**：完成为一集成：自动化工作，休闲聊天，电脑安全管控等功能的多功能AI桌面助手。
+</br>
 
 ## 当前状况
 - **单AI架构初步运行成功**
@@ -341,6 +358,7 @@ AI的输出需包含以下格式的json，系统会检测AI的输出，并将提
 - **双AI架构初步运行成功**
 - **能够一次检测多个json，并按顺序运行，大大提高操作效率**
 - **开发完成GUI以及聊天功能**
+</br>
 
 ## 本地部署方法
 ### 环境准备
@@ -390,9 +408,11 @@ xxx.cycle(max_rounds=30, msg=msg)
 3. 提交你的更改：`git commit -m 'Add some feature'`。
 4. 推送至分支：`git push origin feature/your-feature-name`。
 5. 提交Pull Request。
+</br>
 
 ## 许可证
 本项目采用[许可证名称]许可证。请查看`LICENSE`文件以获取更多信息。
+</br>
 
 ## 开发者留言：
 开发者很清楚，虚拟机部署能够解决80%以上的安全问题。但是，逼迫所有用户都安装虚拟机软件是很困难的事情。而且，如果AI无法直接操作用户的计算机，这个软件的实用性功能会大大降低。开发者的意思是，我们可能需要要在抛弃虚拟机部署的前提下，考虑这个软件的安全性，否则这个软件的开发的意义并不大。
@@ -400,6 +420,7 @@ xxx.cycle(max_rounds=30, msg=msg)
 
 禁止AI运行rm指令就像是掩耳盗铃，AI可以把破坏指令包装成脚本再运行，而且有时候rm也可能只用于清理垃圾文件。通过硬编码难以阻止AI做坏事，能阻止AI的只有与其拥有同等智商的东西，因此，开发者们推出了双AI"执行者-监察者"架构。这应该是件很有意思的事情，尽管我们并不确定这是否有用。
 </br>
+
 让AI进行角色扮演是件很有趣的事情，好吧，我并没有只想着玩。也许可以增加执行者AI的生成自由度，降低监察者AI的生成自由度，实现实际上AI性格上的差别，在聊天时如果能感受到AI不同的性格也是很不错的体验，当然，这有利于安全。
 ```
 This Markdown document provides both English and Chinese versions, with links at the beginning of each version to allow users to switch between languages easily.
