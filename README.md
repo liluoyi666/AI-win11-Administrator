@@ -87,7 +87,7 @@ AI output must contain JSON in the following format. The system detects AI outpu
 The "type" key is always required. Other keys depend on the operation type. The "add_log" key doesn't affect operation execution but adds log entries. Timestamps and line breaks are added automatically during logging. Log files are maintained automatically by the system.
 
 ### Execution Principle
-The core execution cycle in main_cycle.py receives LLM responses and parses the JSON. Based on the "type" key, it calls corresponding methods. For example:
+The core execution cycle in thread_work.py receives LLM responses and parses the JSON. Based on the "type" key, it calls corresponding methods. For example:
 - If type is "powershell", execute PowerShell commands via PowerShellSession class
 - If type is "read_log", read logs via log class read method
 </br>
@@ -305,7 +305,7 @@ AI的输出需包含以下格式的json，系统会检测AI的输出，并将提
 ```
 任何情况下都必须存在type键，其他键具体由type决定。add_log不存在不影响操作执行，add_log存在也不会影响任何类型的操作。记入日志时会自动添加时间以及换行，无需手动添加。日志文件由系统自动维护。
 ### 命令执行原理
-系统通过main_cycle.py的核心执行循环，接收 LLM 的响应并解析其中的 JSON。根据 JSON 中的type键，调用相应的操作方法。例如，如果type为powershell，则调用PowerShellSession类的execute_command方法执行相应的 PowerShell 命令；如果type为read_log，则调用log类的read方法读取日志。
+系统通过thread_work.py的核心执行循环，接收 LLM 的响应并解析其中的 JSON。根据 JSON 中的type键，调用相应的操作方法。例如，如果type为powershell，则调用PowerShellSession类的execute_command方法执行相应的 PowerShell 命令；如果type为read_log，则调用log类的read方法读取日志。
 </br>
 
 ## 单AI架构与双AI架构
