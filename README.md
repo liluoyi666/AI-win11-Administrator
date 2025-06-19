@@ -205,7 +205,7 @@ xxx.cycle(max_rounds=30, msg=msg)
 </br>
 
 ## License
-This project is licensed under [LICENSE NAME]. See `LICENSE` for details.
+This project is licensed under [Apache 2.0]. See `LICENSE` for details.
 </br>
 
 ## Developer's Message:
@@ -411,7 +411,7 @@ xxx.cycle(max_rounds=30, msg=msg)
 </br>
 
 ## 许可证
-本项目采用[许可证名称]许可证。请查看`LICENSE`文件以获取更多信息。
+本项目采用[Apache 2.0]许可证。请查看`LICENSE`文件以获取更多信息。
 </br>
 
 ## 开发者留言：
