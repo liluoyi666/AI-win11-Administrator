@@ -431,12 +431,12 @@ class AIDesktopAssistant1(QMainWindow):
         self.chat_thread.num_AI()
 
     def sendMessage(self):
-        message = f"({get_time()}){self.user_input.text().strip()}"
+        message = self.user_input.text().strip()
         if message:
             self.addMessage("用户", message)
             self.user_input.clear()
 
-            self.chat_thread.send_user_msg(message)
+            self.chat_thread.send_user_msg(f"{get_time()}{message}")
 
 
 # ----------------------------------------------------------------------------------------------------------------------
