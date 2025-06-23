@@ -258,7 +258,7 @@ class work_cycle(QThread):
 # ----------------------------------------------------------------------------------------------------------------------
     # 退出工作状态
     def _Exit(self,msg):
-        if msg["confirm"]=="true":
+        if msg["confirm"]:
             self.status.exit=1
             return "停止工作",""
         else:
