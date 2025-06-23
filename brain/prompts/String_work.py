@@ -103,8 +103,5 @@ def supervisor_user_msg(stdout="",stderr="",executor_msg=""):
 """
     return supervisor_user_msg
 
-
-
 if __name__ =="__main__":
-
     print()

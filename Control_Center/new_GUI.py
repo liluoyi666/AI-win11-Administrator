@@ -518,6 +518,23 @@ class AIDesktopAssistant1(QMainWindow):
     def showAbout(self):
         self.addMessage("系统", "AI桌面助手 v1.0\n基于Python和PyQt5开发\n提供AI辅助工作和聊天功能,聊天状态下可与发送信息与AI交流，在聊天或工作中可以增加工作留言，在工作状态下AI可以读取该留言", "system")
 
+    def closeEvent(self, event):
+        # 停止工作线程
+        self.setting.close()
+
+        if self.work_thread.isRunning():
+            self.work_thread.terminate()
+            self.work_thread.wait()
+
+        # 停止聊天线程
+        if self.chat_thread.isRunning():
+            self.chat_thread.terminate()
+            self.chat_thread.wait()
+
+        self.work_thread
+
+        # 接受关闭事件
+        event.accept()
 if __name__ == '__main__':
     # 示例设置和状态
     app_setting = setting()

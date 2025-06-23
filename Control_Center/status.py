@@ -48,6 +48,12 @@ class setting(QObject):
 
         print('系统设置初始化完成')
 
+    def close(self):
+        self.executor_log.flush_buffer()
+        self.supervisor_log.flush_buffer()
+
+        self.powershell.close()
+
 
 # 可修改的系统状态，参与GUI的信息交换
 class status:

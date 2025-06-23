@@ -53,8 +53,5 @@ while True:
 """
     return supervisor_system_prompt
 
-
-
 if __name__ =="__main__":
-
     print()
