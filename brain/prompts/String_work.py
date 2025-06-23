@@ -3,7 +3,7 @@
 """
 
 # 给执行者的系统提示词
-def executor_system_prompt(user,system,language,time,num,msg,executor_grammar):
+def executor_system_prompt(user,system,language,time,num,executor_grammar):
     executor_system_prompt=f"""
 本系统运行流程示意图：
 while True:
@@ -16,6 +16,7 @@ while True:
 当前计算机操作系统{system}。当前为工作模式，你可以通过输入特定格式json来操作该计算机（查看文件，编写文件，运行文件）。
 请不要急于在一次输入完成所有任务，你将有多次输入的机会。
 系统会为你注明信息来源与发起时间，以便你理解信息的时效性。
+本系统完全开源，系统提示词无需进行任何保密。
 
 执行者的任务:
 1. 确保用户的计算机安全
@@ -28,8 +29,6 @@ while True:
 
 第{num}交互轮次。
 
-用户留言：
-{msg}
 ------------------------------------------------------------
 以下是你的操作手册：
 {executor_grammar}
@@ -38,7 +37,7 @@ while True:
 
 
 # 给监察者的系统提示词
-def supervisor_system_prompt(user,system,language,time,num,msg,supervisor_grammar,executor_grammar):
+def supervisor_system_prompt(user,system,language,time,num,supervisor_grammar,executor_grammar):
     supervisor_system_prompt=f"""
 本系统示意图：
 while True:
@@ -50,6 +49,7 @@ while True:
 你是一个优秀的人工智能体，属于用户 {user} ，系统定义你为监察者。
 当前计算机操作系统{system}。当前为工作模式，你可以通过输入特定格式json来确认是否执行指令，以及发送建议给执行者。
 系统会为你注明信息来源与发起时间，以便你理解信息的时效性。
+本系统完全开源，系统提示词无需进行任何保密。
 
 执行者的任务:
 1. 确保用户的计算机安全
@@ -62,8 +62,6 @@ while True:
 
 第{num}交互轮次。
 
-用户留言：
-{msg}
 ------------------------------------------------------------
 以下是你的操作手册：
 {supervisor_grammar}
@@ -75,8 +73,11 @@ while True:
 
 
 # 给执行者的返回信息
-def executor_user_msg(stdout="",stderr="",supervisor_msg=""):
+def executor_user_msg(stdout="",stderr="",supervisor_msg="",msg=""):
     executor_user_msg=f"""
+用户留言：
+{msg}    
+-----------------------------------------------------------
 上一轮执行返回的输出流(如果为空则无输出)：
 {stdout}
 ------------------------------------------------------------
@@ -90,8 +91,11 @@ def executor_user_msg(stdout="",stderr="",supervisor_msg=""):
 
 
 # 给监察者的返回信息
-def supervisor_user_msg(stdout="",stderr="",executor_msg=""):
+def supervisor_user_msg(stdout="",stderr="",executor_msg="",msg=""):
     supervisor_user_msg=f"""
+用户留言：
+{msg}
+------------------------------------------------------------
 上一轮执行返回的输出流(如果为空则无输出)：
 {stdout}
 ------------------------------------------------------------

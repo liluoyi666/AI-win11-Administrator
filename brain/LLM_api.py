@@ -268,15 +268,9 @@ def create_client(model):
 if __name__ == "__main__":
     # 测试配置
     def test1():
-        test_model = "deepseek-coder"  # 也可以换成其他支持的模型
-        system_msg = system_prompt.format(
-            user='wqws',
-            Time='None'
-        )+grammar
-        user_msg = user_msg.format(
-            stdout='None',
-            stderr='None'
-        )
+        test_model = "deepseek-chat"  # 也可以换成其他支持的模型
+        system_msg = "你是deepseek开发的AI模型"
+        user_msg = "你是谁"
 
 
         try:
@@ -297,8 +291,7 @@ if __name__ == "__main__":
             print("\n原始响应:")
             print(response_content)
 
-            # 打印历史记录长度
-            # print(f"\n对话历史记录数: {len(msg_history)}")
+            print(f"\n对话历史记录数: {msg_history}")
 
         except ValueError as ve:
             print(f"\n配置错误: {ve}")
@@ -309,3 +302,5 @@ if __name__ == "__main__":
                 print("请检查API密钥是否正确设置")
             elif "RateLimitError" in str(e):
                 print("API调用限额已用尽，请稍后重试")
+
+    test1()

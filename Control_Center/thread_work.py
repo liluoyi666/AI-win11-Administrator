@@ -51,7 +51,7 @@ class work_cycle(QThread):
 
         self.user_msgs = user_msgs()
 
-        self.stdout = ''
+        self.stdout = '用户开启了工作模式'
         self.stderr = ''
 
         self.executor_result=''
@@ -77,6 +77,7 @@ class work_cycle(QThread):
 
         while True:
             self.Round_num.emit(round_num)
+            print(round_num,'----------------------------------------------------------------------\n\n')
 
             # 获取执行者的响应并发送信号
             self.executor_result = self.get_result_executor(self.user_msgs.get_msgs(),round_num,confirm,to_executor)
@@ -84,6 +85,9 @@ class work_cycle(QThread):
                 self.executor_output.emit(self.executor_result)
             else:
                 self.system_stderr.emit("获取API响应失败，请检查网络状态")
+                break
+
+            if self.status.exit != 0:
                 break
 
             # 获取监察者的响应并发送信号
@@ -114,7 +118,6 @@ class work_cycle(QThread):
 
             self.Setting.emit(self.setting)
             round_num+=1
-            print(round_num,'----------------------------------------------------------------------\n\n')
 
         self.Setting.emit(self.setting)
         self.work_exit.emit(1)
@@ -123,19 +126,20 @@ class work_cycle(QThread):
 # ----------------------------------------------------------------------------------------------------------------------
     # 获取执行者响应
     def get_result_executor(self,msg,round_num, confirm, to_executor):
+        print(msg)
         system_msg = executor_system_prompt(
             user=self.setting.user,
             system=self.setting.system,
             language=self.setting.language,
             time=str(datetime.now(ZoneInfo("Asia/Shanghai"))),
             num=round_num,
-            msg=msg,
             executor_grammar=self.Grammar
         )
         cmd_output = executor_user_msg(
             stdout=self.stdout,
             stderr=self.stderr,
-            supervisor_msg = confirm + "\n" + to_executor
+            supervisor_msg = confirm + "\n" + to_executor,
+            msg=msg
         )
         # 尝试得到ai的响应
         executor_result = "<None>"
@@ -169,14 +173,14 @@ class work_cycle(QThread):
             language = self.setting.language,
             time = str(datetime.now(ZoneInfo("Asia/Shanghai"))),
             num = round_num,
-            msg = msg,
             supervisor_grammar = supervisor_grammar,
             executor_grammar = self.Grammar
         )
         cmd_output = supervisor_user_msg(
             stdout = self.stdout,
             stderr = self.stderr,
-            executor_msg = executor_result
+            executor_msg = executor_result,
+            msg=msg
         )
         supervisor_result = "<None>"
         confirm = "True"
@@ -256,7 +260,7 @@ class work_cycle(QThread):
         return stdout,stderr
 
 # ----------------------------------------------------------------------------------------------------------------------
-    # 退出工作状态
+    # 特殊操作类型
     def _Exit(self,msg):
         if msg["confirm"]:
             self.status.exit=1
@@ -290,6 +294,8 @@ class work_cycle(QThread):
         self.setting = setting
         self.status = status
 
+
+# 用户留言队列
 class user_msgs:
     def __init__(self,max_len=3):
         self.msgs=[]
@@ -306,7 +312,6 @@ class user_msgs:
             msgs+=f"{a}\n"
 
         return msgs
-
 
 if __name__ =="__main__":
     print()
